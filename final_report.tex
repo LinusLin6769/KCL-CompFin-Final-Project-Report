@@ -1,0 +1,138 @@
+\documentclass[12pt, a4paper]{report}
+
+% ----------------------------------------------
+% packages
+\usepackage[margin=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage[skip=12pt]{parskip}
+\usepackage{setspace}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{verbatim}
+\usepackage{fancyvrb}
+\usepackage{afterpage}
+
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \newpage}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks = false,
+}
+
+\usepackage[nottoc]{tocbibind}
+\usepackage{natbib}
+
+\linespread{1.25}
+
+% \setcitestyle{author,open={(},close={)}}
+
+% ---------------------------------------------
+% document
+\begin{document}
+
+\graphicspath{{./references/images/}}
+\VerbatimFootnotes
+
+% title page
+\pagestyle{empty}
+\input{./title_page/title_page.tex}
+
+% abstract
+\input{./abstract/abstract.tex}
+
+% acknowledgements
+\input{./acknowledgements/acknowledgements.tex}
+
+% blank page
+\afterpage{\blankpage}
+
+% table of contents
+\tableofcontents
+\thispagestyle{empty}
+
+
+\newpage
+
+% list of figures
+\listoffigures
+\thispagestyle{empty}
+
+
+\newpage
+
+% list of tables
+\listoftables
+\thispagestyle{empty}
+
+
+\newpage
+
+% list of algorithms
+\listofalgorithms
+\thispagestyle{empty}
+
+
+\newpage
+
+% ----------------------------------------------
+% here goes the main context
+\pagenumbering{arabic}
+\input{./01introduction/introduction.tex}
+
+
+\input{./02background/background.tex}
+
+
+\input{./03literature_review/literature_review.tex}
+
+
+\chapter{Methodology}
+
+\chapter{Results and Evaluation}
+
+\chapter{Conclusion}
+
+
+\newpage
+\bibliographystyle{abbrvnat}
+\bibliography{refs}
+\nocite{*}
+
+% -------------------------------------------------------------
+% Appendix
+
+\appendix
+\chapter{chapter one}
+
+Something about chapter one
+
+Another something ...
+
+And another something ...
+
+\section{ch1 sec 1}
+
+Something about chapter one, section 1
+
+\chapter{chapter two}
+
+Something about chapter two
+
+\section{ch2 sec 1}
+
+Something about chapter two, section 1
+
+\section{ch2 sec 2}
+
+Something about chapter two, section 2
+
+\chapter{chapter three}
+
+Something about chapter three
+
+\section{ch3 sec 1}
+
+\end{document}

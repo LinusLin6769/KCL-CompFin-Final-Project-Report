@@ -1,0 +1,52 @@
+This is BibTeX, Version 0.99d (TeX Live 2021)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: final_report.aux
+The style file: abbrvnat.bst
+Database file #1: refs.bib
+Warning--to sort, need author or key in x13arimaseatsweb
+Warning--to sort, need author or key in seasonalx13arimaseats
+Warning--empty year in seasonalx13arimaseats
+Warning--empty year in x13arimaseatsweb
+Warning--empty booktitle in inproceedings
+You've used 36 entries,
+            2773 wiz_defined-function locations,
+            830 strings with 10964 characters,
+and the built_in function-call counts, 16096 in all, are:
+= -- 1457
+> -- 889
+< -- 22
++ -- 303
+- -- 267
+* -- 1325
+:= -- 2479
+add.period$ -- 129
+call.type$ -- 36
+change.case$ -- 188
+chr.to.int$ -- 36
+cite$ -- 79
+duplicate$ -- 731
+empty$ -- 1345
+format.name$ -- 327
+if$ -- 3366
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 39
+newline$ -- 208
+num.names$ -- 136
+pop$ -- 380
+preamble$ -- 1
+purify$ -- 159
+quote$ -- 0
+skip$ -- 542
+stack$ -- 0
+substring$ -- 585
+swap$ -- 48
+text.length$ -- 2
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 366
+warning$ -- 5
+while$ -- 143
+width$ -- 0
+write$ -- 501
+(There were 5 warnings)
