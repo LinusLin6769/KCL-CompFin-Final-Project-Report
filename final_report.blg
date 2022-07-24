@@ -3,50 +3,46 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: final_report.aux
 The style file: abbrvnat.bst
 Database file #1: refs.bib
-Warning--to sort, need author or key in x13arimaseatsweb
-Warning--to sort, need author or key in seasonalx13arimaseats
-Warning--empty year in seasonalx13arimaseats
-Warning--empty year in x13arimaseatsweb
 Warning--empty booktitle in inproceedings
-You've used 36 entries,
+You've used 39 entries,
             2773 wiz_defined-function locations,
-            830 strings with 10964 characters,
-and the built_in function-call counts, 16096 in all, are:
-= -- 1457
-> -- 889
-< -- 22
-+ -- 303
-- -- 267
-* -- 1325
-:= -- 2479
-add.period$ -- 129
-call.type$ -- 36
-change.case$ -- 188
-chr.to.int$ -- 36
+            853 strings with 11583 characters,
+and the built_in function-call counts, 17782 in all, are:
+= -- 1592
+> -- 1028
+< -- 25
++ -- 348
+- -- 309
+* -- 1471
+:= -- 2786
+add.period$ -- 140
+call.type$ -- 39
+change.case$ -- 209
+chr.to.int$ -- 39
 cite$ -- 79
-duplicate$ -- 731
-empty$ -- 1345
-format.name$ -- 327
-if$ -- 3366
+duplicate$ -- 802
+empty$ -- 1450
+format.name$ -- 378
+if$ -- 3694
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 39
-newline$ -- 208
-num.names$ -- 136
-pop$ -- 380
+missing$ -- 46
+newline$ -- 225
+num.names$ -- 156
+pop$ -- 403
 preamble$ -- 1
-purify$ -- 159
+purify$ -- 179
 quote$ -- 0
-skip$ -- 542
+skip$ -- 599
 stack$ -- 0
-substring$ -- 585
-swap$ -- 48
+substring$ -- 632
+swap$ -- 51
 text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 366
-warning$ -- 5
-while$ -- 143
+type$ -- 389
+warning$ -- 1
+while$ -- 161
 width$ -- 0
-write$ -- 501
-(There were 5 warnings)
+write$ -- 546
+(There was 1 warning)

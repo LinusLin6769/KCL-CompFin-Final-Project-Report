@@ -1,17 +1,15 @@
-\begin{thebibliography}{36}
+\begin{thebibliography}{39}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem[sea()]{seasonalx13arimaseats}
-Seasonal x-13arima-seats.
-\newblock Website: http://www.seasonal.website.
-
-\bibitem[x13()]{x13arimaseatsweb}
-X-13arima-seats seasonal adjustment program.
-\newblock Website: https://www.census.gov/data/software/x13as.html.
+\bibitem[Adegboye and Kampouridis(2021)]{adegboye2021machine}
+A.~Adegboye and M.~Kampouridis.
+\newblock Machine learning classification and regression models for predicting
+  directional changes trend reversal in fx markets.
+\newblock \emph{Expert Systems with Applications}, 173:\penalty0 114645, 2021.
 
 \bibitem[Aghabozorgi et~al.(2015)Aghabozorgi, {Seyed Shirkhorshidi}, and {Ying
   Wah}]{AGHABOZORGI201516}
@@ -31,6 +29,13 @@ N.~Ahmed, A.~Atiya, N.~Gayar, and H.~El-Shishiny.
 \newblock \emph{Econometric Reviews}, 29:\penalty0 594--621, 08 2010.
 \newblock URL
   \url{https://www.tandfonline.com/doi/abs/10.1080/07474938.2010.481556}.
+
+\bibitem[Aloud et~al.(2012)Aloud, Tsang, Olsen, and
+  Dupuis]{aloud2012directional}
+M.~Aloud, E.~Tsang, R.~Olsen, and A.~Dupuis.
+\newblock A directional-change event approach for studying financial time
+  series.
+\newblock \emph{Economics}, 6\penalty0 (1), 2012.
 
 \bibitem[Bartlett(1947)]{10.2307/3001536}
 M.~S. Bartlett.
@@ -97,10 +102,21 @@ J.~G. {De Gooijer} and R.~J. Hyndman.
   \url{https://www.sciencedirect.com/science/article/pii/S0169207006000021}.
 \newblock Twenty five years of forecasting.
 
+\bibitem[Farmer and Foley(2009)]{farmer2009economy}
+J.~D. Farmer and D.~Foley.
+\newblock The economy needs agent-based modelling.
+\newblock \emph{Nature}, 460\penalty0 (7256):\penalty0 685--686, 2009.
+
 \bibitem[Fuller(2009)]{fuller2009introduction}
 W.~A. Fuller.
 \newblock \emph{Introduction to statistical time series}.
 \newblock John Wiley \& Sons, 2009.
+
+\bibitem[Gen{\c{c}}ay et~al.(2001)Gen{\c{c}}ay, Dacorogna, Muller, Pictet, and
+  Olsen]{genccay2001introduction}
+R.~Gen{\c{c}}ay, M.~Dacorogna, U.~A. Muller, O.~Pictet, and R.~Olsen.
+\newblock \emph{An introduction to high-frequency finance}.
+\newblock Elsevier, 2001.
 
 \bibitem[Glattfelder et~al.(2011)Glattfelder, Dupuis, and
   Olsen]{glattfelder2011patterns}
@@ -152,6 +168,11 @@ N.~E. Huang, Z.~Shen, S.~R. Long, M.~C. Wu, H.~H. Shih, Q.~Zheng, N.-C. Yen,
 \newblock \emph{Proceedings of the Royal Society of London. Series A:
   mathematical, physical and engineering sciences}, 454\penalty0
   (1971):\penalty0 903--995, 1998.
+
+\bibitem[Hull(2003)]{hull2003options}
+J.~C. Hull.
+\newblock \emph{Options futures and other derivatives}.
+\newblock Pearson Education India, 2003.
 
 \bibitem[Hyndman and Athanasopoulos(2021)]{forecastingprincipleandpractice}
 R.~Hyndman and G.~Athanasopoulos.
@@ -239,7 +260,7 @@ X.~Wang, K.~Smith, and R.~Hyndman.
 \newblock \emph{Data mining and knowledge Discovery}, 13\penalty0 (3):\penalty0
   335--364, 2006.
 
-\bibitem[Yeo and Johnson(2000)]{10.1093/biomet/87.4.954}
+\bibitem[Yeo and Johnson(2000)]{10.1093/Biomet/87.4.954}
 I.-K. Yeo and R.~A. Johnson.
 \newblock {A new family of power transformations to improve normality or
   symmetry}.
