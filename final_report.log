@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2022.3.26)  24 JUL 2022 18:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2022.3.26)  25 JUL 2022 03:12
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -507,7 +507,13 @@ Chapter 6.
 
 ] (./final_report.bbl [12
 
-] [13] [14]) [15]
+] [13] [14]
+Underfull \hbox (badness 10000) in paragraph at lines 289--293
+\OT1/cmr/m/it/12 Quan-ti-ta-tive fi-nance, http://www. tand-fon-line. com/doi/a
+bs/10.1080/14697688.2016\OT1/cmr/m/n/12 ,
+ []
+
+) [15]
 Appendix A.
 [16
 
@@ -524,13 +530,13 @@ Package rerunfilecheck Info: File `final_report.out' has not changed.
 (rerunfilecheck)             Checksum: 70FD1C713B2B2E40D943C7E84E5297E1;2760.
  ) 
 Here is how much of TeX's memory you used:
- 10325 strings out of 478994
- 153879 string characters out of 5858184
- 468580 words of memory out of 5000000
- 27556 multiletter control sequences out of 15000+600000
+ 10353 strings out of 478994
+ 154642 string characters out of 5858184
+ 467907 words of memory out of 5000000
+ 27577 multiletter control sequences out of 15000+600000
  408369 words of font info for 44 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 71i,8n,74p,2208b,497s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 71i,8n,74p,2325b,497s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><
 /usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></u
@@ -539,10 +545,10 @@ local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/loc
 al/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/loca
 l/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local
 /texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on final_report.pdf (26 pages, 704704 bytes).
+Output written on final_report.pdf (26 pages, 707584 bytes).
 PDF statistics:
- 368 PDF objects out of 1000 (max. 8388607)
- 326 compressed objects within 4 object streams
- 86 named destinations out of 1000 (max. 500000)
+ 383 PDF objects out of 1000 (max. 8388607)
+ 341 compressed objects within 4 object streams
+ 93 named destinations out of 1000 (max. 500000)
  182 words of extra memory for PDF output out of 10000 (max. 10000000)
 

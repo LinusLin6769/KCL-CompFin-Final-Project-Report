@@ -1,4 +1,4 @@
-\begin{thebibliography}{39}
+\begin{thebibliography}{46}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -118,6 +118,12 @@ R.~Gen{\c{c}}ay, M.~Dacorogna, U.~A. Muller, O.~Pictet, and R.~Olsen.
 \newblock \emph{An introduction to high-frequency finance}.
 \newblock Elsevier, 2001.
 
+\bibitem[Glattfelder and Golub(2022)]{glattfelder2022bridging}
+J.~B. Glattfelder and A.~Golub.
+\newblock Bridging the gap: Decoding the intrinsic nature of time in market
+  data.
+\newblock \emph{arXiv preprint arXiv:2204.02682}, 2022.
+
 \bibitem[Glattfelder et~al.(2011)Glattfelder, Dupuis, and
   Olsen]{glattfelder2011patterns}
 J.~B. Glattfelder, A.~Dupuis, and R.~B. Olsen.
@@ -227,6 +233,11 @@ S.~Makridakis, E.~Spiliotis, and V.~Assimakopoulos.
   \url{https://www.sciencedirect.com/science/article/pii/S0169207019301128}.
 \newblock M4 Competition.
 
+\bibitem[Mayerhofer(2019)]{mayerhofer2019three}
+E.~Mayerhofer.
+\newblock Three essays on stopping.
+\newblock \emph{Risks}, 7\penalty0 (4):\penalty0 105, 2019.
+
 \bibitem[Mihov et~al.(2022)Mihov, Firoozye, and Treleaven]{mihov2022towards}
 A.-H. Mihov, N.~Firoozye, and P.~Treleaven.
 \newblock Towards augmented financial intelligence.
@@ -247,12 +258,45 @@ V.~Petrov, A.~Golub, and R.~B. Olsen.
 \newblock Agent-based model in directional-change intrinsic time.
 \newblock \emph{Available at SSRN 3240456}, 2018.
 
+\bibitem[Petrov et~al.(2019{\natexlab{a}})Petrov, Golub, and
+  Olsen]{petrov2019instantaneous}
+V.~Petrov, A.~Golub, and R.~Olsen.
+\newblock Instantaneous volatility seasonality of high-frequency markets in
+  directional-change intrinsic time.
+\newblock \emph{Journal of Risk and Financial Management}, 12\penalty0
+  (2):\penalty0 54, 2019{\natexlab{a}}.
+
+\bibitem[Petrov et~al.(2019{\natexlab{b}})Petrov, Golub, and
+  Olsen]{petrov2019intrinsic}
+V.~Petrov, A.~Golub, and R.~B. Olsen.
+\newblock Intrinsic time directional-change methodology in higher dimensions.
+\newblock \emph{Available at SSRN 3440628}, 2019{\natexlab{b}}.
+
 \bibitem[Shensa et~al.(1992)]{shensa1992discrete}
 M.~J. Shensa et~al.
 \newblock The discrete wavelet transform: wedding the a trous and mallat
   algorithms.
 \newblock \emph{IEEE Transactions on signal processing}, 40\penalty0
   (10):\penalty0 2464--2482, 1992.
+
+\bibitem[Tsang(2010)]{tsang2010directional}
+E.~Tsang.
+\newblock Directional changes, definitions.
+\newblock \emph{Working Paper WP050-10 Centre for Computational Finance and
+  Economic Agents (CCFEA), University of Essex Revised 1, Tech. Rep.}, 2010.
+
+\bibitem[Tsang et~al.(2015)Tsang, Tao, and Ma]{tsang2015profiling}
+E.~P. Tsang, R.~Tao, and S.~Ma.
+\newblock Profiling financial market dynamics under directional changes.
+\newblock \emph{Quantitative finance, http://www. tandfonline.
+  com/doi/abs/10.1080/14697688.2016}, 1164887, 2015.
+
+\bibitem[Tsang et~al.(2017)Tsang, Tao, Serguieva, and Ma]{tsang2017profiling}
+E.~P. Tsang, R.~Tao, A.~Serguieva, and S.~Ma.
+\newblock Profiling high-frequency equity price movements in directional
+  changes.
+\newblock \emph{Quantitative finance}, 17\penalty0 (2):\penalty0 217--225,
+  2017.
 
 \bibitem[Wang et~al.(2006)Wang, Smith, and Hyndman]{wang2006characteristic}
 X.~Wang, K.~Smith, and R.~Hyndman.

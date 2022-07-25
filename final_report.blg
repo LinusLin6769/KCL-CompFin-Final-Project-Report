@@ -4,45 +4,45 @@ The top-level auxiliary file: final_report.aux
 The style file: abbrvnat.bst
 Database file #1: refs.bib
 Warning--empty booktitle in inproceedings
-You've used 39 entries,
+You've used 46 entries,
             2773 wiz_defined-function locations,
-            853 strings with 11583 characters,
-and the built_in function-call counts, 17782 in all, are:
-= -- 1592
-> -- 1028
-< -- 25
-+ -- 348
-- -- 309
-* -- 1471
-:= -- 2786
-add.period$ -- 140
-call.type$ -- 39
-change.case$ -- 209
-chr.to.int$ -- 39
-cite$ -- 79
-duplicate$ -- 802
-empty$ -- 1450
-format.name$ -- 378
-if$ -- 3694
-int.to.chr$ -- 1
+            889 strings with 12740 characters,
+and the built_in function-call counts, 20623 in all, are:
+= -- 1835
+> -- 1198
+< -- 28
++ -- 407
+- -- 360
+* -- 1702
+:= -- 3239
+add.period$ -- 161
+call.type$ -- 46
+change.case$ -- 247
+chr.to.int$ -- 45
+cite$ -- 93
+duplicate$ -- 942
+empty$ -- 1685
+format.name$ -- 438
+if$ -- 4278
+int.to.chr$ -- 2
 int.to.str$ -- 1
-missing$ -- 46
-newline$ -- 225
-num.names$ -- 156
-pop$ -- 403
+missing$ -- 53
+newline$ -- 260
+num.names$ -- 184
+pop$ -- 473
 preamble$ -- 1
-purify$ -- 179
+purify$ -- 210
 quote$ -- 0
-skip$ -- 599
+skip$ -- 700
 stack$ -- 0
-substring$ -- 632
-swap$ -- 51
+substring$ -- 686
+swap$ -- 60
 text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 389
+type$ -- 466
 warning$ -- 1
-while$ -- 161
+while$ -- 186
 width$ -- 0
-write$ -- 546
+write$ -- 634
 (There was 1 warning)
