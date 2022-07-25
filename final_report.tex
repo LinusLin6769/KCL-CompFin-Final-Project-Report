@@ -2,10 +2,12 @@
 
 % ----------------------------------------------
 % packages
-\usepackage[margin=2cm]{geometry}
+\usepackage[margin=3cm]{geometry}
 \usepackage{graphicx}
 \usepackage[skip=12pt]{parskip}
 \usepackage{setspace}
+\usepackage{amsfonts}
+\usepackage{amsmath}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{verbatim}
@@ -24,6 +26,11 @@
 
 \usepackage[nottoc]{tocbibind}
 \usepackage{natbib}
+
+\usepackage{fancyhdr}
+\usepackage{dirtytalk}
+\usepackage{babel}
+\usepackage{csquotes}
 
 \linespread{1.25}
 
@@ -79,7 +86,9 @@
 
 % ----------------------------------------------
 % here goes the main context
-\pagenumbering{arabic}
+\pagestyle{fancy}
+\fancyhead[R]{\thepage}
+\fancyfoot{}
 \input{./01introduction/introduction.tex}
 
 

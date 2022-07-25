@@ -1,3 +1,31 @@
-\chapter{Background}
+\chapter{Background}\label{ch: background}
+
+In this chapter, we present comprehensive theoretical background to the topics related to our experiment and analyses.
+
+\section{Univariate Time Series Forecasting}
+
+\subsection{General Notions of Forecasting}
+A time series is a sequential collection of random variables indexed by time. If the random variables are of one dimension, then the time series is considered univariate\footnote{If the random variables are of dimension higher than one, then the time series is considered multivariate.}. In this section, we focus on univariate time series. Let $Y = \{Y_{t_i} \}_{i = 1, 2, \cdots, n}$ be an univariate time series with $ Y_{t_i} \in \mathbb{R}, \; \forall i, \; n \in \mathbb{N}$ and $t = \{t_i \}_{i = 1, 2, \cdots, n}$ being the set of time indices of $Y$ (also referred to as the set of timestamps). Let $y_{t_k}$ be the largest information set about $Y$ that is accessible at time point $t_k \in t$, e.g., we might have the observations of $Y$ being known ($\{Y_{t_j}\}_{j = 1, 2, \cdots, k } \subset y_{t_k}$). Then in the context of modelling, given an unkown (random) target $Y_{t_s}$ with $s > k, \; s \in \mathbb{N}$, we can formulate the notion of forecasting as the following:
+\begin{displayquote}
+    Forecasting the target $Y_{t_s}$ at time point $t_k$ is to find a function $f(y_{t_k}) = \widehat{Y_{t_s}}$, such that $\widehat{Y_{t_s}}$ is a good estimation of $Y_{t_s}$ based some performance metric $PM$.
+\end{displayquote}
+
+We can come up with all sorts of function $f$ for such forecasting objective. Functions devised to serve the objective are referred to as models. By convention, we categorise models into families, in which models belonging to the same family share a similar structure. For example, models being a linear combination of their inputs are referred to as linear models. Additionally, models taking a linear combination of known observations of the target are known as the Autoregressive (AR) models.
+
+\subsubsection{Modelling}
+In a general sense, the notion of modelling refers to the methodologies of devising a model that serves the objective well\footnote{What constitutes `well' will be discussed later.}. In this section, we consider the objective being univariate time series forecasting as we addressed in the previous paragraph and go through the common procedure of modelling.
+
+
+The concept of modelling is the work of finding a model such that it serves the objective efficiently.
+
+
+\section{Target Transformation in Univariate Time Series Forecasting}
+
+
+\section{Directional Change Intrinsic Time Framework}
+
+
+
+
 
 The term `intrinsic-time' came from one of the key interpretations about the event-based nature of the Directional Change algorithm.
