@@ -3,29 +3,68 @@
 In this chapter, we present comprehensive theoretical background to the topics related to our experiment and analyses.
 
 \section{Univariate Time Series Forecasting}
+In this section, we discuss the topic of univariate time series forecasting.
 
-\subsection{General Notions of Forecasting}
-A time series is a sequential collection of random variables indexed by time. If the random variables are of one dimension, then the time series is considered univariate\footnote{If the random variables are of dimension higher than one, then the time series is considered multivariate.}. In this section, we focus on univariate time series. Let $Y = \{Y_{t_i} \}_{i = 1, 2, \cdots, n}$ be an univariate time series with $ Y_{t_i} \in \mathbb{R}, \; \forall i, \; n \in \mathbb{N}$ and $t = \{t_i \}_{i = 1, 2, \cdots, n}$ being the set of time indices of $Y$ (also referred to as the set of timestamps). Let $y_{t_k}$ be the largest information set about $Y$ that is accessible at time point $t_k \in t$, e.g., we might have the observations of $Y$ being known ($\{Y_{t_j}\}_{j = 1, 2, \cdots, k } \subset y_{t_k}$). Then in the context of modelling, given an unkown (random) target $Y_{t_s}$ with $s > k, \; s \in \mathbb{N}$, we can formulate the notion of forecasting as the following:
+\subsection{General Notions of Time Series Forecasting}
+A time series is a sequential collection of random variables indexed by time. If the random variables are of one dimension, then the time series is considered univariate\footnote{If the random variables are of dimension higher than one, then the time series is considered multivariate. Datasets in such form are also referred to as panel data.}. In this section, the discussions fall within the context of univariate time series forecasting. Let $Y = \{Y_{t_i} \}_{i = 1, 2, \cdots, n}$ be an univariate time series with $ Y_{t_i} \in \mathbb{R}, \; \forall i, \; n \in \mathbb{N}$ and $t = \{t_i \}_{i = 1, 2, \cdots, n}$ being the set of time indices of $Y$ (also referred to as the set of timestamps). Let $y_{t_k}$ be the largest information set about $Y$ that is accessible to the model at time point $t_k \in t$, e.g., we might have the observations of $Y$ being known ($\{Y_{t_j}\}_{j = 1, 2, \cdots, k } \subset y_{t_k}$). Then in the context of modelling, given an unkown (random) target $Y_{t_s}$ with $s > k, \; s \in \mathbb{N}$, we can articulate the notion of forecasting as the following:
 \begin{displayquote}
-    Forecasting the target $Y_{t_s}$ at time point $t_k$ is to find a function $f(y_{t_k}) = \widehat{Y_{t_s}}$, such that $\widehat{Y_{t_s}}$ is a good estimation of $Y_{t_s}$ based some performance metric $PM$.
+    Forecasting the value $Y_{t_s}$ at time point $t_k$ is to find a function $f(y_{t_k}) = \widehat{Y_{t_s}}$, such that $\widehat{Y_{t_s}}$ is a good estimation of $Y_{t_s}$.
 \end{displayquote}
+We can come up with all sorts of function $f$ for such forecasting objective. Functions devised to serve the objective are referred to as models. In a general sense, the notion of modelling refers to the methodologies of devising a model that serves the objective well. In particular, for any arbitrary pair of $t_k$ and $t_s$, we want to have a model $f(y_{t_k})$ such that it gives us a reliable estimation of $Y_{t_s}$.
 
-We can come up with all sorts of function $f$ for such forecasting objective. Functions devised to serve the objective are referred to as models. By convention, we categorise models into families, in which models belonging to the same family share a similar structure. For example, models being a linear combination of their inputs are referred to as linear models. Additionally, models taking a linear combination of known observations of the target are known as the Autoregressive (AR) models.
+\subsubsection{Gap}
+Notice that a modelling objective is parameterised by the pair of time indices $(t_k, t_s)$. The timestamp $t_k$ directly affects the information set $y_{t_k}$ and thus determines the information the model $f$ can utilise. The timestamp $t_s$, on the other hand, controls how far in the future are we forecasting. If the gap between the two timestamps is big, this means that the model is asked to forecast further into the future. If the gap between the two timestamps is small, then the objective might be considered easier because we are only trying to look a little bit ahead into the future. In order to better communicate and characterise the forecasting objective, we formalise this gap between the pair of timestamps as the \textit{gap} and denoted as $G$:
+\begin{equation*}
+    G = t_s - t_k, \quad t_s, \; t_k \in t
+\end{equation*}
+With such notion of the gap, we can then articulate the forecasting objective as: $G$ ahead forecasting. $G$ takes the format of the timestamps. Depending on the format of the timestamps, the objective can be one-step ahead forecasting or one-year ahead forecasting. We will go into topics concerning timestamps in one of the upcoming paragraphs.
 
-\subsubsection{Modelling}
-In a general sense, the notion of modelling refers to the methodologies of devising a model that serves the objective well\footnote{What constitutes `well' will be discussed later.}. In this section, we consider the objective being univariate time series forecasting as we addressed in the previous paragraph and go through the common procedure of modelling.
+\subsubsection{Forecast Horizon}
+Observe that the target we have in the previous forecasting objective $Y_{t_s}$ is a single value in the future. It's possible to generalise the target a little and have multiple targets in the future. The number of targets we try to forecast is called the \textit{forecast horizon}. Having a forecast horizon equal to one is to forecast one value ahead into the future, and having a forecast horizon equal to five is to forecast all five values ahead into the future. To put it formally, let $\langle X \rangle$ be a counting operation that counts the number of elements in a set $X$, and a task trying to forecast a collection of unknown values $Y_S = \{ Y_{s_1}, Y_{s_2}, \cdots \}_{s_1, s_2, \cdots \in t, \; s_1, s_2, \cdots > t_k}$. Then the forecast horizon of such task is denoted as
+\begin{equation*}
+    H = \langle Y_S \rangle
+\end{equation*}
+
+\subsubsection{Timestamps}
+In a time series, the time index of a random variable carries information of the time point in which the random variable lives in the time domain. In some sense, the timestamps mark the `location' the random variables on a time line. For example, a monthly revenue time series $Y$ in an arbitrary year can have the set of months in a year as its timestamp set and be denoted as $Y = \{ Y_{Jan}, Y_{Feb}, Y_{Mar}, \cdots, Y_{Dec} \}$. The time indices also tell us the time-relevance (geological relationship on a time line) of the random variables among each other. In fact, the time-relevance of the random variables in a time series plays a crucial role in time series analysis. We often have to perform mathematical operations involving such relationship. An example is our coming up with the gap measurement we addressed in the previous paragraph. Another example is the calculation of the relative growth of the time series. The need of these math operations pushes us modellers to come up with innovative ways to define the timestamps because we obviously cannot perform calculations on notaions like $September$ or $Friday$. To put it in math terms, what we often do is to have a mapping from physical timestamps to the real number line (or a subset of the real number set, say, the natural number set) and use the target set of this mapping as the timestamp set for math operations. In the next paragraph, we discuss some examples of such mapping.
+
+Take the previous monthly revenue time series as an example, one of the simpliest way is to index the time series chronologically with natural numbers $\{ 1, 2, 3, \cdots, 12 \}$. The new index system allows for mathematical operations on the timestamps, such as addition. The objective of two-month ahead forecasting can be considered as two-step ahead forecasting with $G = 2$. Three-month moving average of the time series can now be of a generalised form of 3-step moving average. Another good example is the financial studies of stochastic processes, in which we often use the non-negative real line and adopt an annual scale, i.e., the starting point of the time series is indexed as $0$, one month after that is indexed $0.0833$, one year time point is indexed $1.0$, and so on. This is particularly useful when we expand the studies of time series using Stochastic Differential Equations (SDE). $dt$ in the drift term in the SDE expression
+\begin{equation*}
+    \frac{dY_t}{Y_t} = \mu_t dt + \sigma_t dW_t, \quad dW_t \sim N(0, dt)
+\end{equation*}
+is now properly defined as a real number that we can do all sorts of math operation on (observe how $dW_t$ is defined as a Brownian Motion that follows a Gaussian distribution with variance $dt$).
+
+\subsubsection{Time Heterogeneity}
+There are cases where the timestamps of the time series are not identically spaced between consecutive random variables. The previous example of montly revenue in a year is one of them due to the months having different durations. Time series as such are technically referred to as being \textit{time heterogeneous}\footnote{Time heterogeneity is common in financial time series due to the nature of how financial markets work. For example, most markets are open only during working hours in working days. Another example is the high-frequency financial time series (see Dacarogna et al. \citeyear{genccay2001introduction})}\footnote{\textit{Time homogeneity} is the counter part of time heterogeneity, specifying time series which have equally spaced timestamps}. Time heterogeneity can be an interesting source of information carried by the time series but can also be a major issue in time series studies. In the next paragraph, we present a common problem caused by time heterogeneity.
+
+Calculating measurements related to the unit of time can be a problem with time heterogeneous time series. One common example of such measurement is return used in finance. Return measures the relative change of the price (or, say, value) over a period of time with respect to its initial level. Several different definition can be drawn to the notion of return, but we will look at the simpliest one as they all exhibits the same relationship with time heterogeneity. Let $Y = \{ Y_{t_i} \}_{i = 1, 2, \cdots n}, \; n \in \mathbb{N}$ now be a time series of the price movement of an asset over time, and the time index set being $t = \{ t_i \}_{i = 1, 2, \cdots, n}$. Define the coresponding net return measure as
+\begin{equation*}
+R_{t_i} = \frac{Y_{t_i} - Y_{t_{i-1}}}{Y_{t_{i-1}}}, \quad i \in \{2, 3, \cdots, n \}.
+\end{equation*}
+The net return $R_{t_i}$ for some $i$ is thus the relative price change of $Y_{t_i}$ over the time period $t_i - t_{i-1}$ with respect to $Y_{t_{i-1}}$. Let $R = \{ R_{t_i} \}_{i = 2, 3, \cdots, n}$ be the time series of one-step net returns derived from $Y$. If $t$ is equally spaced by, say, a day, the time series $Y$ is time homogeneous. The time series $R$ we calculated is then a time series of daily net return of $Y$. Nevertheless, in the case where $t$ is not equally spaced, the time series $Y$ is time heterogeneous. Then we no longer know what is the period of the net return we calculated from the time series $Y$, thus making it harder for us to generate robust analyses.
+
+\subsection{Univariate Time Series Forecasting with Regression Modelling}
+In this section, we take the discussion of univariate time series modelling further and address how do we approach the articulated forecasting objective with regression models.
+
+\begin{verbatim}
+    Recall the forecasting objective is to come up with a model $f$ capable of generating `good' estimations of some given target using the provided information $y_{t_k}$. In the context of modelling, this normally is formulated into an optimisation problem: we define a fitness measure, which should be a function of the estimates $f(y_{t_k})$ and the target, and we then optimise the fitness as an objective function with respect to the model $f$ in some algorithmic way. The final output of such procedure will be a model (function $f$) that optimally serves the objective we have. In the remainder of this section, we discuss the general framework of how the procedure works.
+\end{verbatim}
+
+\subsubsection{Regression modelling}
+Let $f$ be a regression model with known structure yet unknown parameter set $\beta$. Then the objective is to find $\beta$ such that $f(y_{t_k}; \beta)$ estimates $Y_{t_s}$ with certain level of satisfaction. In the univariate case, the $y_{t_k}$ is the realised values of $Y$ until time point $t_k$, namely
+\begin{equation*}
+    y_{t_k} = \{ Y_{t_k}, Y_{t_{k-1}}, Y_{t_{k-2}}, \cdots, Y_{t_1} \}.
+\end{equation*}
+Given the long list of past observations, there is a parameter we have to decide which controls the number of past observations the model will use to come up with a single prediction. Such parameter is called the \textit{number of lags}\footnote{Its naming this way originates in autoregressive estimation in time series studies. Such estimation aims at finding the optimal order of autoregressive feature of a time series. Normally, such order is referred to as \textit{lag}.}. Let the number of lag be denoted as $L$. Then we can create the regression model
+\begin{equation*}
+    y = X \beta + \epsilon
+\end{equation*}
 
 
-The concept of modelling is the work of finding a model such that it serves the objective efficiently.
+In order to train the regression model, we have to make a design matrix using these values.
 
 
 \section{Target Transformation in Univariate Time Series Forecasting}
 
 
 \section{Directional Change Intrinsic Time Framework}
-
-
-
-
-
-The term `intrinsic-time' came from one of the key interpretations about the event-based nature of the Directional Change algorithm.
