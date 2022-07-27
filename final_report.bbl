@@ -1,4 +1,4 @@
-\begin{thebibliography}{46}
+\begin{thebibliography}{47}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -303,6 +303,12 @@ X.~Wang, K.~Smith, and R.~Hyndman.
 \newblock Characteristic-based clustering for time series data.
 \newblock \emph{Data mining and knowledge Discovery}, 13\penalty0 (3):\penalty0
   335--364, 2006.
+
+\bibitem[White(1982)]{white1982maximum}
+H.~White.
+\newblock Maximum likelihood estimation of misspecified models.
+\newblock \emph{Econometrica: Journal of the econometric society}, pages 1--25,
+  1982.
 
 \bibitem[Yeo and Johnson(2000)]{10.1093/Biomet/87.4.954}
 I.-K. Yeo and R.~A. Johnson.

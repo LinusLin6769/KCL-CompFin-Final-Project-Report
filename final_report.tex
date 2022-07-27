@@ -32,6 +32,21 @@
 \usepackage{babel}
 \usepackage{csquotes}
 
+% inline column vector
+\newcommand{\icol}[1]{
+    \begin{bmatrix}
+        #1
+    \end{bmatrix}
+}
+
+% inline row vector
+\newcommand{\irow}[1]{
+    \begin{bmatrix} #1 \end{bmatrix}
+} 
+
+% matrix bold face notation
+\newcommand{\matr}[1]{\mathbf{#1}}
+
 \linespread{1.25}
 
 % \setcitestyle{author,open={(},close={)}}
