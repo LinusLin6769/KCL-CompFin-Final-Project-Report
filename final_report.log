@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2022.3.26)  27 JUL 2022 22:53
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2022.3.26)  28 JUL 2022 18:21
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -576,7 +576,7 @@ Overfull \hbox (8.08469pt too wide) in paragraph at lines 5--6
 m accusantium doloremque
  []
 
-<./references/images//test_image.png, id=183, 1312.905pt x 803.0pt>
+<./references/images//test_image.png, id=185, 1312.905pt x 803.0pt>
 File: ./references/images//test_image.png Graphic file (type png)
 <use ./references/images//test_image.png>
 Package pdftex.def Info: ./references/images//test_image.png  used on input lin
@@ -642,11 +642,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [15]
-Overfull \hbox (1.97157pt too wide) in paragraph at lines 85--86
-[]\OT1/cmr/m/n/12 Consider $\OML/cmm/m/it/12 f$ \OT1/cmr/m/n/12 as an arbitrary
- machine learning regression model with a known structure.
- []
-
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -656,7 +651,13 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [16]
-Overfull \hbox (3.01067pt too wide) in paragraph at lines 88--90
+Overfull \hbox (1.97157pt too wide) in paragraph at lines 84--85
+[]\OT1/cmr/m/n/12 Consider $\OML/cmm/m/it/12 f$ \OT1/cmr/m/n/12 as an arbitrary
+ machine learning regression model with a known structure.
+ []
+
+
+Overfull \hbox (3.01067pt too wide) in paragraph at lines 87--89
 \OT1/cmr/m/n/12 number signifying how well they fit the target. We can finally 
 formulate our modelling
  []
@@ -670,12 +671,42 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [17]
-Overfull \hbox (23.74438pt too wide) in paragraph at lines 110--110
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
+put line 112.
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[18]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[19]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[20]
+Overfull \hbox (23.74438pt too wide) in paragraph at lines 196--196
 []\OT1/cmr/bx/n/17.28 Target Transformation in Univariate Time Series
  []
 
 
-Overfull \hbox (1.90642pt too wide) in paragraph at lines 113--113
+Overfull \hbox (1.90642pt too wide) in paragraph at lines 199--199
 []\OT1/cmr/bx/n/17.28 Directional Change Intrinsic Time Framework 
  []
 
@@ -688,60 +719,16 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-15.05003pt}.
 
-[18]
+[21]
 Chapter 3.
-[19
+[22
 
 ]
-Overfull \hbox (1.16115pt too wide) in paragraph at lines 11--12
-\OT1/cmr/m/n/12 inferences assume the variable of interest is normally distribu
-ted, e.g., t-test, Analysis
+Overfull \hbox (13.88602pt too wide) in paragraph at lines 11--12
+\OT1/cmr/m/n/12 dataset and achieved better results than all the original M3 pa
+rticipants (see Makridakis
  []
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[20]
-Overfull \hbox (1.05235pt too wide) in paragraph at lines 15--16
-\OT1/cmr/m/n/12 by the models. Meeting these assumptions improves the robustnes
-s of the conclusions
- []
-
-
-Overfull \hbox (12.14946pt too wide) in paragraph at lines 15--16
-\OT1/cmr/m/n/12 drawn by the modelling results. In a general sense, one can say
- that the transformations
- []
-
-
-Overfull \hbox (15.7221pt too wide) in paragraph at lines 17--18
-\OT1/cmr/m/n/12 observations sampled from the time domain into the frequency do
-main and decomposing
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[21]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[22]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -751,6 +738,33 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [23]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[24]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[25]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[26]
 Overfull \hbox (3.28345pt too wide) in paragraph at lines 32--33
 \OT1/cmr/m/n/12 These generalisations, as well as the advancements of the DC in
 trinsic time framework
@@ -764,7 +778,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[24])
+[27])
 Overfull \hbox (24.20396pt too wide) in paragraph at lines 34--114
 []\OT1/cmr/m/n/12 In this chapter, we reviewed relevant works in two different 
 realms: target transformations
@@ -778,22 +792,22 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[25]
+[28]
 Chapter 4.
-[26
+[29
 
 ]
 Chapter 5.
-[27
+[30
 
 ]
 Chapter 6.
-[28
+[31
 
-] (./final_report.bbl [29
+] (./final_report.bbl [32
 
 ]
-Underfull \hbox (badness 2781) in paragraph at lines 95--104
+Underfull \hbox (badness 2781) in paragraph at lines 100--109
 \OT1/cmr/m/it/12 International Journal of Forecasting\OT1/cmr/m/n/12 , 22(3):44
 3--473, 2006.  ISSN 0169-
  []
@@ -806,7 +820,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[30]
+[33]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -815,14 +829,20 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[31]
-Underfull \hbox (badness 2042) in paragraph at lines 289--293
+[34]
+Underfull \hbox (badness 1448) in paragraph at lines 257--262
+[]\OT1/cmr/m/n/12 J. Osborne.  Improving your data transformations: Applying th
+e box-cox
+ []
+
+
+Underfull \hbox (badness 2042) in paragraph at lines 301--305
 []\OT1/cmr/m/n/12 E. P. Tsang, R. Tao, and S. Ma.  Profiling financial market d
 ynamics
  []
 
 
-Underfull \hbox (badness 1281) in paragraph at lines 289--293
+Underfull \hbox (badness 1281) in paragraph at lines 301--305
 \OT1/cmr/m/n/12 under directional changes.  \OT1/cmr/m/it/12 Quantitative finan
 ce, http://www. tandfonline.
  []
@@ -835,7 +855,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[32])
+[35])
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -844,53 +864,54 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[33]
+[36]
 Appendix A.
-[34
+[37
 
 ]
 Appendix B.
-[35
+[38
 
 ]
 Appendix C.
-[36
+[39
 
 ] (./final_report.aux)
 Package rerunfilecheck Info: File `final_report.out' has not changed.
-(rerunfilecheck)             Checksum: 428CC4118E11283E827DAC85F3F500C5;4188.
+(rerunfilecheck)             Checksum: 5F0CD5159E01BC4DD5FB57FF8DA25825;4188.
  ) 
 Here is how much of TeX's memory you used:
- 12637 strings out of 478994
- 186471 string characters out of 5858184
- 534480 words of memory out of 5000000
- 29749 multiletter control sequences out of 15000+600000
+ 12668 strings out of 478994
+ 186992 string characters out of 5858184
+ 544630 words of memory out of 5000000
+ 29771 multiletter control sequences out of 15000+600000
  414828 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 71i,11n,74p,2522b,591s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 71i,15n,74p,2522b,591s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
-</usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><
-/usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></u
-sr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr
-/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/l
-ocal/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/loc
-al/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/
-texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/tex
-live/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texliv
-e/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/local/texlive
-/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/
-2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/20
-21/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2021
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2021/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2021/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2021/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2021/tex
-mf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on final_report.pdf (37 pages, 842743 bytes).
+</usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
+/usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></
+usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></us
+r/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/
+local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/lo
+cal/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/loca
+l/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/t
+exlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texl
+ive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive
+/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/local/texlive/
+2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2
+021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/202
+1/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2021/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2021/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2021/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2021/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2021/texm
+f-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on final_report.pdf (40 pages, 862797 bytes).
 PDF statistics:
- 541 PDF objects out of 1000 (max. 8388607)
- 476 compressed objects within 5 object streams
- 131 named destinations out of 1000 (max. 500000)
+ 573 PDF objects out of 1000 (max. 8388607)
+ 503 compressed objects within 6 object streams
+ 140 named destinations out of 1000 (max. 500000)
  222 words of extra memory for PDF output out of 10000 (max. 10000000)
 

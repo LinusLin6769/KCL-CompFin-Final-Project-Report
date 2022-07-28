@@ -35,7 +35,7 @@ Take the previous monthly revenue time series as an example; one simplest way is
 $dt$ in the drift term is now properly defined as a real number on which we can do all sorts of math operations (observe how $dW_t$ is defined as a Brownian Motion that follows a Gaussian distribution with variance $dt$).
 
 \subsubsection{Time Heterogeneity}
-There are cases where the timestamps of the time series are not identically spaced between consecutive random variables. The previous example of monthly revenue in a year is one of them due to the months having different durations. Time series as such is technically referred to as being \textit{time heterogeneous}\footnote{Time heterogeneity is common in financial time series due to the nature of how financial markets work. For example, most markets are open only during working hours on working days. Another example is the high-frequency financial time series (see Dacarogna et al. \citeyear{genccay2001introduction})}\footnote{\textit{Time homogeneity} is the counterpart of time heterogeneity, specifying time series which have equally spaced timestamps}. Time heterogeneity can be an interesting source of information carried by the time series but can also be a major issue in time series studies. The following paragraph presents a common problem caused by time heterogeneity.
+There are cases where the timestamps of the time series are not identically spaced between consecutive random variables. The previous example of monthly revenue in a year is one of them due to the months having different durations. Time series as such is technically referred to as being \textit{time heterogeneous}\footnote{Time heterogeneity is common in financial time series due to the nature of how financial markets work. For example, most markets are open only during working hours on working days. Another example is the high-frequency financial time series (see Dacarogna et al. \citeyear{genccay2001introduction}). \textit{Time homogeneity} is the counterpart of time heterogeneity, specifying time series which have equally spaced timestamps}. Time heterogeneity can be an interesting source of information carried by the time series but can also be a major issue in time series studies. The following paragraph presents a common problem caused by time heterogeneity.
 
 Calculating measurements related to the unit of time can be a problem with time heterogeneous time series. One common example of such measurement is the return used in finance. Return measures the relative change of the price (or, say, value) over a period of time with respect to its initial level. Several definitions can be drawn to the notion of return, but we will look at the simplest one as they all exhibit the same relationship with time heterogeneity. Let $Y = \{ Y_{t_i} \}_{i = 1, 2, \cdots n}, \; n \in \mathbb{N}$ now be a time series of the price movement of an asset over time, and the time index set being $t = \{ t_i \}_{i = 1, 2, \cdots, n}$. Define the corresponding net return measure as
 \begin{equation*}
@@ -48,16 +48,12 @@ In this section, we further discuss univariate time series modelling and address
 
 Recall the forecasting objective is to come up with a model $f$ capable of generating `good' estimations of some target $Y_{t_s}$ at time $t_k$ using the provided information $\mathcal{Y}_{t_k}$. We will see in the later paragraphs that this is very similar to the process of solving for a Quasi-Maximum Likelihood Estimation (QMLE) in a statistical sense (White (\citeyear{white1982maximum})). In the context of modelling, the procedure is normally to gather the available information and formulate it into an optimisation problem: we define a fitness measure (like the `L' in QMLE), which should be a function of the estimates $f(\mathcal{Y}_{t_k})$ and the target, and we then optimise the fitness as an objective function with respect to the model $f$ in some algorithmic way (the `M' in QMLE). The final output of such a procedure will be a model (function $f$) that optimally serves our objective (the `E' in QMLE). In the remainder of this section, we discuss the general framework of how the procedure works.
 
-\subsubsection{The Design Matrix and Target}
-In regression problems, the design matrix and the target are made from accessible information and formulated for a modelling environment. In this paragraph, we discuss how to develop the design matrix and target in univariate time series modelling. Recall that the forecasting objective is to estimate $Y_{t_s}$ at time point $t_k$, with the gap $\tau = t_s - t_k > 0$ and the model is only able to utilise the accessible information set $\mathcal{Y}_{t_k}$. This dataset is called the \textit{training set}. For our modelling problem, we can only use what is provided in our training set $\mathcal{Y}_{t_k}$. The idea is to create a sandbox in which we simulate the modelling process. The design matrix and the target create this sandbox (environment). Without loss of generality, for the target $Y_{t_s}$, the information set accessible is $\mathcal{Y}_{t_s - \tau}$. In the event we have a one dimensional time series, $\mathcal{Y}_{t_s-\tau}$ is simply the collection of realised values of $Y$ until time point $t_s-\tau = t_k$, namely
+\subsubsection{The Sliding Window, Design Matrix and Target}
+In regression problems, the design matrix and the target are made from accessible information and formulated for a modelling environment. In this paragraph, we discuss how to develop the design matrix and target in univariate time series modelling. Recall that the forecasting objective is to estimate $Y_{t_s}$ at time point $t_k$, with the gap $\tau = t_s - t_k > 0$ and the model is only able to utilise the accessible information set $\mathcal{Y}_{t_k}$. This dataset is called the \textit{training set}. For our modelling problem, we can only use what is provided in our training set $\mathcal{Y}_{t_k}$. Without loss of generality, for the target $Y_{t_s}$, the information set accessible is $\mathcal{Y}_{t_s - \tau}$. In the event we have a one dimensional time series, $\mathcal{Y}_{t_s-\tau}$ is simply the collection of realised values of $Y$ until time point $t_s-\tau = t_k$, namely
 \begin{equation*}
     \mathcal{Y}_{t_s-\tau} = \{ Y_{t_s-\tau} = y_{t_s-\tau}, Y_{t_{s-1}-\tau} = y_{t_{s-1}-\tau}, Y_{t_{s-2}-\tau} = y_{t_{s-2}-\tau}, \cdots, Y_{t_1} = y_{t_1} \}.
 \end{equation*}
-With this long list of past observations, there is a parameter we have to decide, which controls the number of past observations the model will use for a single prediction. Such parameter is called the \textit{number of lags}\footnote{Its naming originates in autoregressive estimation in time series studies. Such estimation aims at finding the optimal order of the autoregressive feature of a time series. Typically, such order is referred to as the \textit{lag}.}. Let the number of lag be denoted as $\lambda, \; \lambda \in \mathbb{N}, \; \lambda \ll k$. Then the values we allow the model to use for some target $Y_{t_i}$ is
-\begin{equation*}
-    \mathcal{Y}_{t_i-\tau} = \{ y_{t_i-\tau}, y_{t_{i-1}-\tau}, y_{t_{i-2}-\tau}, \cdots, y_{t_{i-\lambda}-\tau} \}.
-\end{equation*}
-Then the design matrix $\matr{X}$ and the corresponding $\matr{y}$ can be formulated as
+To make use of this long list of past observations, the idea is to create a sandbox in which we simulate the model making predictions. The environment in which the model makes a prediction is simply a mapping from the information it can use to a target. We do this by using the methodology called the \textit{sliding window}. The sliding window is parameterised by a single constant parameter $\lambda, \; \lambda \in \mathbb{N}, \; \lambda > 2$ that controls the width of the window. The decision of $\lambda$ should take into account modelling configurations including the size of our training set, forecast horizon, gap, and information we want the model to use in a single prediction task. Once $\lambda$ is decided, we move the window chronologically throughout $\mathcal{Y}_{t_s -\tau}$. For every step of the window, we create an independent prediction instance for the model using the values contain within the window - the final value in a single window is the target for horizon one forecasting and the rest of the values are potentially accessible to the model for its prediction. We then have numerous such forecasting instances for the model from which we can foster the whole sandbox. The sandbox consists of the design matrix $\matr{X}$ and the target $\matr{y}$. They can be formulated as
 \begin{equation*}
     \matr{y} = \begin{bmatrix}
         y_{t_\lambda}       \\
@@ -69,43 +65,133 @@ Then the design matrix $\matr{X}$ and the corresponding $\matr{y}$ can be formul
     \end{bmatrix}
     , \quad
     \matr{X} = \begin{bmatrix}
-        y_{t_{\lambda - 1}}   & y_{t_{\lambda - 2}} & \cdots & y_{t_{1}} \\
-        y_{t_\lambda}         & y_{t_{\lambda - 1}} & \cdots & y_{t_{2}} \\
-        \cdot                 & \cdot               & \cdots & \cdot     \\
-        \cdot                 & \cdot               & \cdots & \cdot     \\
-        y_{t_{k - 2}}         & y_{t_{k - 3}}       & \cdots & y_{t_{k - \lambda}} \\
-        y_{t_{k - 1}}         & y_{t_{k - 2}}       & \cdots & y_{t_{k - \lambda + 1}} \\
+        y_{t_{\lambda} - \tau}   & y_{t_{\lambda-1} - \tau} & \cdots & y_{t_{1}} \\
+        y_{t_{\lambda+1} - \tau} & y_{t_{\lambda} - \tau}   & \cdots & y_{t_{2}} \\
+        \cdot                    & \cdot                    & \cdots & \cdot     \\
+        \cdot                    & \cdot                    & \cdots & \cdot     \\
+        y_{t_{k-1} - \tau}       & y_{t_{k-2} - \tau}       & \cdots & y_{t_{k - \lambda} - \tau} \\
+        y_{t_{k} - \tau}         & y_{t_{k-1} - \tau}       & \cdots & y_{t_{k - \lambda + 1} - \tau} \\
     \end{bmatrix}.
 \end{equation*}
-In this sandbox, the model has $k-\lambda + 1$ prediction to make, each being using a row vector in $\matr{X}$, denoted as $\matr{X}_i, \; i \in \{1, 2, \cdots, k-\lambda+1 \}$ and estimate the corresponding a row element in $\matr{y}$, denoted as $\matr{y}_i$. The idea is to find a model that best maps the rows in $\matr{X}$ to elements in $\matr{y}$ in general, and we say this is our best model $f$ that serves the objective of a $\tau$ ahead forecasting task given the time series we have.
+The target $\matr{y}$ is a $k-\lambda+1$ by $1$ column matrix and the design matrix $\matr{X}$ is of $k-\lambda+1$ by $\lambda$. In this training environment, the model has $k-\lambda + 1$ predictions to make, each being to use a row vector in $\matr{X}$, denoted as $\matr{X}_i, \; i \in \{1, 2, \cdots, k-\lambda+1 \}$ and estimate the corresponding row element in $\matr{y}$, denoted as $\matr{y}_i$. The idea is to find a model that best maps the rows in $\matr{X}$ to elements in $\matr{y}$ in general, and we say this is our best model $f$ that serves the objective of a $\tau$ ahead forecasting task given the time series we have.
+
+\subsubsection{The Number of Lags}
+One remark regarding the design matrix is the notion of the \textit{number of lags}. The number of lags describes how many latest observations the model is allowed to use for a single forecasting task, i.e., the number of columns in $\matr{X}$. Its naming originates in autoregressive estimation in time series studies. Such estimation aims at finding the optimal order of the autoregressive feature of a time series. This is equivalent to finding the optimal number of latest observations the model should use for a single prediction. Typically, such autoregressive order is referred to as the \textit{lag}.
 
 \subsubsection{The Model}
 We start by describing what a model is in more detail. Given the design matrix $\matr{X}$ and target $\matr{y}$ we made in the previous section, the forecasting objective is now transformed into coming up with a model $f$ that best maps the rows in $\matr{X}$ to the corresponding element in $\matr{y}$.
 
 Consider $f$ as an arbitrary machine learning regression model with a known structure. Knowing the structure of $f$ implies we know the structure of its parameter set and how $f$ maps $\matr{X}_i$ to $\matr{y}_i$ for some $i$. Let $\theta$ be the mapping that generates the parameters that go into $f$. The output of $\theta$ is parameterised by its input set; let it be $\phi$. Parameter set like $\phi$ is called the \textit{hyperparameters} - it characterises the parameters of $f$. The model $f$ in our forecasting objective can thus be noted as
-\begin{equation}\label{eq: estimate}
+\begin{equation*}
     f(\theta(\phi); \matr{X}) = \widehat{\matr{y}} \sim \matr{y}.
-\end{equation}
+\end{equation*}
 To better measure the performance of such an estimation, we define a fitness function $\mathcal{E}$. The fitness function takes the estimations generated by $f$ and returns a real number signifying how well they fit the target. We can finally formulate our modelling objective as
-\begin{equation}
-    \arg_{\theta(\phi)} \max \mathcal{E}(f(\theta(\phi); \matr{X}), \matr{y}).
+\begin{equation}\label{eq: ml training}
+    \arg_{\theta(\phi)} \max \mathcal{E}(\widehat{\matr{y}}, \matr{y}), \quad \widehat{\matr{y}} = f(\theta(\phi); \matr{X}).
 \end{equation}
 This process is what we call \textit{training the model}.
 
-To give an example, if $f$ is a simple linear regression model, then we know $\theta$ gives a tuple of real numbers (known as weights) which the model uses to generate a linear combination of its inputs; in this case, a row matrix $\matr{X}_i$. Specifications of $\theta$ are then controlled by its input $\phi$, e.g., whether there is an intercept term or the number of elements of the tuple. Note that the number of elements in the tuple depends on the number of lags $\lambda$ we adopted in making the design matrix $\matr{X}$, i.e., $\lambda \in \phi$. Not knowing the exact values of $\theta$ (and certainly $\phi$ as well) describes the state of the model $f$ being untrained. Then the modelling objective is to find $\phi$ and $\theta$ such that $\mathcal{E}(f(\theta(\phi); \matr{X}), \matr{y})$ is maximised.
+To give an example, if $f$ is a simple linear regression model, then we know $\theta$ gives a tuple of real numbers (known as weights) which the model uses to generate a linear combination of its inputs; in this case, a row matrix $\matr{X}_i$. Specifications of $\theta$ are then controlled by its input $\phi$, e.g., whether there is an intercept term or the number of elements of the tuple. Note that the number of elements in the tuple depends on the number of lags we have in making the design matrix $\matr{X}$, i.e., $\lambda \in \phi$. Not knowing the exact values of $\theta$ (and certainly $\phi$ as well) describes the state of the model $f$ being untrained. Then the modelling objective is to find $\phi$ and $\theta$ such that $\mathcal{E}(f(\theta(\phi); \matr{X}), \matr{y})$ is maximised.
 
 \subsubsection{The Statistical Resemblance}
-Analogously, training a machine learning model can be put into statistical terms. In particular, it resembles the Quasi-Maximum Likelihood Estimation (QMLE) process with some minor tweaks. Consider our objective with $Y$, but with the elements following an arbitrary distribution $\mathcal{D}$ characterised by $\theta$, i.e., $Y_{t_i} \sim \mathcal{D}(\theta), \; \forall \; t_i \in t$\footnote{The `Quasi-' simply means we do not know whether the distribution $\mathcal{D}$ is Gaussian or not (see White \citeyear{white1982maximum}).}. Let $g_{Y_{t_s} | \mathcal{Y}_{t_k}}(\cdot; \theta)$ be the conditional joint probability density function (pdf) of the random variable $Y_{t_s}$ given $\mathcal{Y}_{t_k}$ and $\theta$. Then the expression
+Analogously, training a machine learning model can be put into statistical terms. In particular, it resembles the Quasi-Maximum Likelihood Estimation (QMLE) process with some minor tweaks. Consider our objective with $Y$, but with the elements following an arbitrary distribution $\mathcal{D}$ characterised by $\theta$, i.e., $Y_{t_i} \sim \mathcal{D}(\theta), \; \forall \; t_i \in t$\footnote{The `Quasi-' simply means we do not know whether the distribution $\mathcal{D}$ is Gaussian or not (see White \citeyear{white1982maximum}).}. Let $\mathcal{F}_{Y_{t_s} | \mathcal{Y}_{t_k}}(\cdot; \theta)$ be the conditional joint probability density function (pdf) of the random variable $Y_{t_s}$ given $\mathcal{Y}_{t_k}$ and $\theta$. Then the expression
 \begin{equation*}
-    g_{Y_{t_s} | \mathcal{Y}_{t_k}}(y_{t_s}| y_{t_k} ; \theta)
+    \mathcal{F}_{Y_{t_s} | \mathcal{Y}_{t_k}}(y_{t_s}| y_{t_k} ; \theta)
 \end{equation*}
 describes the probability of observing $Y_{t_s} = y_{t_s}$ given the past observations and parameter $\theta$. Then the objective of QMLE is to find the $\theta$ conditional on observing $\mathcal{Y}_{t_k}$, under which $y_{t_s}$ is most likely to be observed. We can formalise such objectives as
 \begin{equation*}
-    \arg_{\theta} \max g_{Y_{t_s} | \mathcal{Y}_{t_k}}(\theta ; y_{t_s} | y_{t_k}).
+    \arg_{\theta} \max \mathcal{F}_{Y_{t_s} | \mathcal{Y}_{t_k}}(\theta ; y_{t_s} | y_{t_k}).
 \end{equation*}
-The objective function that is to be optimised is called the \textit{likelihood function}, denoted as $\mathcal{L}(\theta)$. $\mathcal{L}(\theta)$ is essentially still a pdf. It returns the probability of observing $y_{t_s}$ conditional on $y_{t_k}$ with the parameter $\theta$. Maximising such likelihood function with respect to $\theta$ is thus equivalent to finding a $\theta$ dictating the generating mechanism of the random variable $Y_{t_s}$ such that it is most likely to be observed as $y_{t_s}$.
+Notice how the variable is now $\theta$ while the observations are given. The new objective function that is to be optimised is called the \textit{likelihood function}, denoted as $\mathcal{L}(\theta)$. $\mathcal{L}(\theta)$ is essentially still a pdf. It returns the probability of observing $y_{t_s}$ conditional on $y_{t_k}$ with the parameter $\theta$. Maximising such likelihood function with respect to $\theta$ is thus equivalent to finding a $\theta$ dictating the generating mechanism of the random variable $Y_{t_s}$ such that it is most likely to be observed as $y_{t_s}$.
 
 Training a machine learning model bears some resemblance to QMLE. Training a model aims to find a mechanism to reproduce the target with the observations. At the same time, QMLE tries to find the set of parameters characterising the distribution of the target variable conditional on its past realisations. The outcome of training an ML model is to have a deterministic function that serves the purpose of forecasting. On the other hand, QMLE yields a set of parameters dictating the underlying distribution of the target variables, i.e., you do not end up having a recipe for making deterministic values but a probabilistic distribution. Both methodologies tackle the problem with an optimisation framework involving an objective function: QMLE utilises the probability density function (pdf) that comes with a random variable with a known distribution. ML modelling devises a fitness function to evaluate the goodness of the estimation. We hope this section contributes to a better theoretical understanding of ML modelling in terms of statistical analysis.
+
+\subsubsection{Model Selection with Validation}
+In the phase of training a model using $\mathcal{Y}_{t_k}$, notice that we have to first have the hyperparameters $\phi$ before we actually starting searching for optimal $\theta$. Such process of finding $\phi$ is called \textit{model selection} or \textit{hyperparameter tuning}. The way we approach model selection starts by selecting a subset of the training set with respect to the row and call it the \textit{validation set}\footnote{The choice of validation set is usually a proportion of the latest instances from the training set, say, the latest ten instances or the latest ten percents of instances of the training set.}. Let the size of the validation set be $v, \; v \in \mathbb{N}, \; v \ll k - \lambda + 1$\footnote{The decision of $v$ depends on the size of our training dataset. The bigger $v$ we wish to have, the less data is left for the training.}. We then try (validate) whether a $\phi$ candidate works fine using the validation set. For a given hyperparameter candidate $\phi_0$, we know the exact structure of $\theta(\phi_0)$ such that we can run the optimisation regime, i.e., model training using equation \ref{eq: ml training}. Then for $\phi_0$, we do the \textit{validation} illustrated as algorithm \ref{alg: validation}.
+\begin{algorithm}[H]
+    \caption{Validation}\label{alg: validation}
+    \begin{algorithmic}
+    \State{Let $L$ be an empty list.}
+    \State{Let $s = k - \lambda + 1 - v$ be the first index of the validation set.}
+    \For{$ i \in \{0, 1, 2, \cdots, v-1 \}$}
+        \State{$\matr{y}_{train}  \leftarrow \{\matr{y}_i \}_{i = 1, 2, \cdots, s - 1 + i}$ Train on all information before the validation point.}
+        \State{$\matr{y}_{val}    \leftarrow \matr{y}_{ s + i}$ This is the validation instance in $\matr{y}$.}
+        \State{$\matr{X}_{train}  \leftarrow \{\matr{X}_i \}_{i = 1, 2, \cdots, s - 1 + i}$ Train on all information before the validation point.}
+        \State{$\matr{X}_{val}    \leftarrow \matr{X}_{ s + i}$ This is the validation instance in $\matr{X}$.}
+        \State{Do training: $\theta(\phi_0)_0 = \arg_{\theta(\phi_0)} \max \mathcal{E}(\widehat{\matr{y}_{train}}, \matr{y}_{train}), \quad \widehat{\matr{y}_{train}} = f(\theta(\phi_0); \matr{X}_{train})$}
+        \State{Store the fitness score of $\theta(\phi_0)_0$ in list $L$, i.e., $\mathcal{E}(f(\theta(\phi_0)_0; \matr{X}_{train}), \matr{y}_{train})$}
+    \EndFor
+    \State{Let $V_{\phi_0} \equiv \frac{1}{v}\sum{L}$ be the mean of the scores stored in list $L$.}
+    \end{algorithmic}
+\end{algorithm}
+The result for validating a single hyperparameter $\phi_0$ is the validation score $V_{\phi_0}$ we compute in the final step of the algorithm. Then if we have a set of $k$ candidate hyperparameters $\theta = \{ \theta_i \}_{i = 1, 2, \cdots, k}, \; k \in \mathbb{N}$, we can repeat such validation process $k$ times and yield $k$ validation scores $\{ V_{\phi_i} \}, \; \forall i \in \{1, 2, \cdots, k \}$. We then take the hyperparameter set with the most preferable fitness score
+\begin{equation*} 
+    \phi_{best} = \arg_{\phi_i} \max \{ V_{\phi_i} \}_{i = 1, 2, \cdots, k}
+\end{equation*}
+and say $\phi_{best}$ is the optimal hyperparameter set to use in our modelling problem.
+
+\subsubsection{Model Evaluation - Testing}
+In the event we wish to conclude the model's performance using some measure, this is called \textit{model evaluation} or \textit{testing the model}. Testing is done in a similar manner as the validation we addressed in model selection (notice how we use a validation score to measure the performance of a model). In some cases, we could simply use the validation score of the best performing hyperparameter $V_{\phi_{best}}$ because this score is also a concluding measure of our model performance. However, if we want to actually simulate the situation in which our model is put into production, then we can simply take another segment from the training data (a proportion of latest observations) and perform a single round of validation, except for this time, it is not validation anymore. We refer this to as model evalutaion and the dataset used for it as the \textit{test set}. Let $\kappa$ denote the size of the test dataset. Then we have to push the validation set and let the latest $\kappa$ instances in the training set be the test set. Our formation of the sandbox is now turned and renamed into
+\begin{align*}
+    \matr{y}_{train} &=
+    \begin{bmatrix}
+        y_{t_\lambda}       \\
+        y_{t_{\lambda + 1}} \\
+        \cdot               \\
+        \cdot               \\
+        y_{t_{k-1 - v - \kappa}}         \\
+        y_{t_{k - v - \kappa}}            
+    \end{bmatrix}
+    , \quad
+    \matr{X}_{train} =
+    \begin{bmatrix}
+        y_{t_{\lambda} - \tau}   & y_{t_{\lambda-1} - \tau} & \cdots & y_{t_{1}} \\
+        y_{t_{\lambda+1} - \tau} & y_{t_{\lambda} - \tau}   & \cdots & y_{t_{2}} \\
+        \cdot                    & \cdot                    & \cdots & \cdot     \\
+        \cdot                    & \cdot                    & \cdots & \cdot     \\
+        y_{t_{k-1-v-\kappa}-\tau} & y_{t_{k-2-v-\kappa}-\tau} & \cdots & y_{t_{k-\lambda-v-\kappa}-\tau} \\
+        y_{t_{k-v-\kappa}-\tau}   & y_{t_{k-1-v-\kappa}-\tau} & \cdots & y_{t_{k-\lambda+1-v-\kappa}-\tau}
+    \end{bmatrix}\\
+    \matr{y}_{val} &=
+    \begin{bmatrix}
+        y_{t_{k - v - \kappa + 1}}       \\
+        y_{t_{k - v - \kappa + 2}} \\
+        \cdot               \\
+        \cdot               \\
+        y_{t_{k - v - 1}}         \\
+        y_{t_{k - v}}            
+    \end{bmatrix}
+    , \quad
+    \matr{X}_{val} =
+    \begin{bmatrix}
+        y_{t_{k-v-\kappa+1}-\tau}   & y_{t_{k-v-\kappa}-\tau} & \cdots & y_{t_{k-\lambda+1-v-\kappa+1}-\tau} \\
+        y_{t_{k-v-\kappa+2}-\tau} & y_{t_{k-v-\kappa+1}-\tau}   & \cdots & y_{t_{k-\lambda+1-v-\kappa+2}-\tau} \\
+        \cdot                    & \cdot                    & \cdots & \cdot     \\
+        \cdot                    & \cdot                    & \cdots & \cdot     \\
+        y_{t_{k-v-1}-\tau}       & y_{t_{k-v-2} - \tau}       & \cdots & y_{t_{k-\lambda+1-v-1}-\tau} \\
+        y_{t_{k-v}-\tau}         & y_{t_{k-v-1} - \tau}       & \cdots & y_{t_{k-\lambda+1-v}-\tau} 
+    \end{bmatrix}\\
+    \matr{y}_{test} &=
+    \begin{bmatrix}
+        y_{t_{k - v + 1}}       \\
+        y_{t_{k - v + 2}} \\
+        \cdot               \\
+        \cdot               \\
+        y_{t_{k - 1}}         \\
+        y_{t_k}             
+    \end{bmatrix}
+    , \quad
+    \matr{X}_{test} =
+    \begin{bmatrix}
+        y_{t_{k-v+1} - \tau}   & y_{t_{k-v} - \tau} & \cdots & y_{t_{k-\lambda+1-v+1}} \\
+        y_{t_{\lambda+1} - \tau} & y_{t_{\lambda} - \tau}   & \cdots & y_{t_{k-\lambda+1-v+2}} \\
+        \cdot                    & \cdot                    & \cdots & \cdot     \\
+        \cdot                    & \cdot                    & \cdots & \cdot     \\
+        y_{t_{k-1} - \tau}       & y_{t_{k-2} - \tau}       & \cdots & y_{t_{k-\lambda+1-1} - \tau} \\
+        y_{t_{k} - \tau}         & y_{t_{k-1} - \tau}       & \cdots & y_{t_{k-\lambda+1} - \tau} 
+    \end{bmatrix}
+\end{align*}
+To sum up, the \textit{training set} now consists of $k - \lambda + 1 - v - \kappa$ instances, the \textit{validation set} consists of $v$ instances and the \textit{test set} consists of $\kappa$ instances. The three sets take up all the information we have in our accessible information set $\mathcal{Y}_{t_k}$. Given we already have the best performing hyperparameter $V_{\phi_{best}}$, we can simply do a single round of validation described in algorithm \ref{alg: validation} using the test set and come up with a score that concludes the model performance. Such score is referred to as the \textit{test score}. And that concludes a typical modelling operation.
 
 \section{Target Transformation in Univariate Time Series Forecasting}
 
