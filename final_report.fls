@@ -807,6 +807,10 @@ INPUT ./02background/background.tex
 INPUT ./02background/background.tex
 INPUT ./02background/background.tex
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmsl12.tfm
+INPUT ./02background/univariate_.tex
+INPUT ./02background/univariate_.tex
+INPUT ./02background/univariate_.tex
+INPUT ./02background/univariate_.tex
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
@@ -824,6 +828,14 @@ INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmbx6.tfm
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmbx7.tfm
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm
+INPUT ./02background/target_.tex
+INPUT ./02background/target_.tex
+INPUT ./02background/target_.tex
+INPUT ./02background/target_.tex
+INPUT ./02background/dc_.tex
+INPUT ./02background/dc_.tex
+INPUT ./02background/dc_.tex
+INPUT ./02background/dc_.tex
 INPUT ./03literature_review/literature_review.tex
 INPUT ./03literature_review/literature_review.tex
 INPUT ./03literature_review/literature_review.tex
@@ -837,6 +849,7 @@ INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmtt12.tfm
 INPUT final_report.aux
 INPUT ./final_report.out
 INPUT ./final_report.out
+INPUT /usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
