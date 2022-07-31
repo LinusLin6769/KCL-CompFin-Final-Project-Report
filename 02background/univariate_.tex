@@ -106,7 +106,7 @@ Training a machine learning model bears some resemblance to QMLE. Training a mod
 
 \subsubsection{Model Selection with Validation}
 In the phase of training a model using $\mathcal{Y}_{t_k}$, notice that we have to first have the hyperparameters $\phi$ before we actually starting searching for optimal $\theta$. Such process of finding $\phi$ before actually fitting the model with respect to $\theta$ is called \textit{model selection} or \textit{hyperparameter tuning}. The way we approach model selection starts by selecting a subset of the training set with respect to the row and call it the \textit{validation set}\footnote{The choice of validation set is usually a proportion of the latest instances from the training set, say, the latest ten instances or the latest ten percents of instances of the training set.}. Let the size of the validation set be $v, \; v \in \mathbb{N}, \; v \ll k - \lambda + 1$\footnote{The decision of $v$ depends on the size of our training dataset. The bigger $v$ we wish to have, the less data is left for the training but the more data is used for validation. $v$ is a part of modelling configuration.}. We then try (validate) whether a $\phi$ candidate works fine using the validation set. For a given hyperparameter candidate $\phi_0$, we know the exact structure of $\theta(\phi_0)$ such that we can run the optimisation regime, i.e., model training using equation \ref{eq: ml training}. Then for a single $\phi_0$, we utilise the training set $\mathcal{Y}_{t_k}$, decide $v$ and we do the \textit{validation} illustrated as algorithm \ref{alg: validation}.
-\begin{algorithm}[H]
+\begin{algorithm}
     \caption{Validation}\label{alg: validation}
     \begin{algorithmic}
     \State{Let $L$ be an empty list.}
