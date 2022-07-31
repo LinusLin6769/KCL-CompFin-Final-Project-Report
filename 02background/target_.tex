@@ -67,7 +67,7 @@ Observe that for an arbitrary $i \in \{2, 3, \cdots, k \}$
 \begin{equation*}
     \lim_{R_{t_i} \rightarrow 0}{R_{t_i} - \log(\frac{y_i}{y_{i-1}}) = 0}.
 \end{equation*}
-This is why log-differencing is a simulation of the net return and often is referred to as the \textit{log return}, hence our notation of $logr$. Notice that $\mathcal{Y}^{(logr)}_{t_k}$ is now of a scale around $0$ despite whatever scale $\mathcal{Y}_{t_k}$ originally is. This is one of the cases where we need a complementing back transformation. We move on to generating the training target and training design matrix through
+This is why log-differencing is a simulation of the net return and often is referred to as the \textit{log return} (hence our notation $logr$). Notice that $\mathcal{Y}^{(logr)}_{t_k}$ is now of a scale around $0$ despite whatever scale $\mathcal{Y}_{t_k}$ originally is. This is one of the cases where we need a complementing back transformation. We move on to generating the training target and training design matrix through
 \begin{equation*}
     \matr{y}^{(logr)}_{train}, \; \matr{X}^{(logr)}_{train} = \mathcal{S}(\mathcal{Y}^{(logr)}_{t_k}; \tau, h, \lambda)
 \end{equation*}

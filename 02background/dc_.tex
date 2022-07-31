@@ -1,1 +1,93 @@
 \section{Directional Change Intrinsic Time Framework}
+
+In this section, we dive into the technical details of the Directional Change (DC) Intrinsic Time Framework. To elaborate on the naming, `Directional Change' describes the \textit{Directional Change Events} identified from a given time series by an algorithm and `Intrinsic Time' is one of the key characteristics bore by the DC events. We start by addressing such algorithm in Section \ref{subsec: dc algo} and we move on to the intrinsic time ideology and some discussions of the whole framework in Section \ref{subsec: dc discussion}.
+
+\subsection{The Algorithm for Directional Change Events}\label{subsec: dc algo}
+The algorithm in DC framework operates much like a \textit{state machine}. It classifies every entries in a given time series into \textit{states}. The output of the algorithm is thus a set of tuples with the first element in each tuple being the original values from the given time series and the second element being its corresponding state assigned by the algorithm. With the assignments of states to the values, directional change events can then be identified from the given time series. Let an arbitrary time series be $\mathcal{Y}_{t_k} = \{y_{t_i} \}_{i = 1, 2, \ldots, k}$. Then the algorithm $\mathcal{T}^{(DC)}$ can be given by
+\begin{align*}
+    &\mathcal{T}^{(DC)} (\mathcal{Y}_{t_k} ; \delta) = \mathcal{Y}_{t_k}^{(DC)} \\
+    &\mathcal{Y}_{t_k}^{(DC)} = \{ (y_{t_i}, s)\}_{i = 1, 2, \ldots, k}, \; s \in S
+\end{align*}
+where
+\begin{itemize}
+    \setlength\itemsep{-5pt}
+    \item $\delta = (\delta_{down}, \delta_{up})$ is a pair of threshold values parameterising the classification
+    \item $S$ is a set of possible states identified by the algorithm.
+\end{itemize}
+Set $S$ consists of seven possible states that could be assigned to the values in $\mathcal{Y}_{t_k}$ in order to construct the identification of DC events.
+\begin{enumerate}
+    \item[1.] Local Extreme: The starting point of a time series is identified as a local extreme. Other than the starting point, the rest of the local extreme points are the start of a trend and also the end of the previous overshoot. One thing to hightlight is that, except for the starting point, all local extrema are only recognisable once its latter trend is identified. In other words, they are determined in hindsight.
+    \item[2.,3.] Bullish or Bearish Trend: The value is identified as experiencing a bullish or bearish trend.
+    \item[4.,5.] Bullish or Bearish Overshoot: Upon the identification of a bullish or bearish trend, the price is at a bullish or bearish overshoot before it reaches a local extreme (or, say, the next trend with opposite direction).
+    \item[6.,7.] Bullish or Bearish DC Confirmation: This value is recognised as a confirmation point of the occurrence and the end of a bullish or bearish trend. Note that the end of a bullish or bearish trend is also the end of a DC event and the start of the next one. This is identified by the value has rised or decreased more than $\delta_{up}$ or $\delta_{down}$ compared to the previously spotted local extreme.
+\end{enumerate}
+See algorithm \ref{alg: dc} for the detailed pseudocode of $\mathcal{T}^{(DC)} (\mathcal{Y}, \delta)$.
+\begin{algorithm}
+    \caption{The Algorithm for Directional Change Events}\label{alg: dc}
+    \begin{algorithmic}
+    \State{Input: a time series $\mathcal{Y}_{t_k} = \{y_{t_i} \}_{i = 1, 2, \ldots, k}$}
+    \State{Input: a pair of downward and upward thresholds $\delta = (\delta_{down}, \delta_{up})$}
+    \State{Define: $\mathcal{R} (x ; y)$ be a return measure for a spot value $x$ with respect to a given reference value $y$}
+    \State{Initialise current mode to $none$}
+    \State{Initialise local extreme $e$ to $none$}
+    \For{$y_{t_i} \in \{y_{t_1}, y_{t_2}, \cdots, y_{t_k} \} $}
+        \If{$i$ is $0$}
+            \State{Update local extreme $e$ to $y_{t_i}$ and move on to next iteration.}
+        \EndIf
+        \If{Current mode is $none$}
+            \State{$r \leftarrow \mathcal{R}(y_{t_i}; e)$}
+            \If{$r \geq \delta_{up}$}
+                \State{Mark a bullish trend from the last local extreme to current $y_{t_i}$.}
+                \State{Update current mode to $bullish$ and move on to next iteration.}
+            \ElsIf{$ r < \delta_{down}$}
+                \State{Mark a bearish trend from the last local extreme to current $y_{t_i}$.}
+                \State{Update current mode to $bearish$ and move on to next iteration.}
+            \EndIf
+            \State{Mark $y_{t_i}$ to unidentified state.}
+        \EndIf
+        \If{Current mode is $bullish$}
+            \If{$y_{t_i} \geq e$}
+                \State{Update the local extreme $e$ to $y_{t_i}$.}
+            \EndIf
+            \State{$r \leftarrow \mathcal{R} (y_{t_i}; e)$}
+            \If{$r \leq \delta_{down}$}
+                \State{Update current mode to $bearish$.}
+                \State{Mark a bearish trend from the local extreme to the current $y_{t_i}$.}
+                \State{Move on to the next iteration.}
+            \EndIf
+            \State{Mark $y_{t_i}$ as going through a bullish overshoot.}
+        \ElsIf{Current mode is $bearish$}
+            \If{$y_{t_i} \leq e$}
+                \State{Update the local extreme $e$ to $y_{t_i}$.}
+            \EndIf
+            \State{$r \leftarrow \mathcal{R}(y_{t_i}; e)$}
+            \If{$r \geq \delta_{up}$}
+                \State{Update current mode to $bullish$.}
+                \State{Mark a bullish trend from the local extreme to the current $y_{t_i}$.}
+                \State{Move on to the next iteration.}
+            \EndIf
+            \State{Mark $y_{t_i}$ as going through a bearish overshoot.}
+        \EndIf
+    \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{Discussions}\label{subsec: dc discussion}
+By contruction of the algorithm, bullish and bearish trends appear alternatively with the gap being filled by an overshoot following the direction of the former trend. An overshoot is essentially the residual of a trend before reaching the start of the next opposite-direction trend. For example:
+\begin{align*}
+    &\text{bullish trend} \rightarrow \text{bullish overshoot} \rightarrow \text{bearish trend} \\
+    &\rightarrow \text{bearish overshoot} \rightarrow \text{bullish trend} \rightarrow \cdots.
+\end{align*}
+A directional change event is a downturn or upturn event which is a combination of an overshoot and its consecutive trend\footnote{An overshoot and its consecutive trend have opposite directions.}, and the identification of DC events is the primary goal of the $\mathcal{T}^{(DC)}$ algorithm. Here are some remarks concerning the algorithm.
+\begin{enumerate}
+    \item Observe that a DC event is condisered complete only when the time series has moved passed the threshold set by $\delta = (\delta_{down}, \delta_{up})$. Therefore, lower $\delta$ values leads to less DC events identified by the algorithm and vice versa.
+    \item In the event where $\delta_{down} \neq \delta_{up}$, the algorithm is set to have different sensitivity to bullish and bearish trends.
+    \item Due to how $\mathcal{T}^{(DC)}$ is parameterised by $\delta$, the number of DC events is negatively correlated to the volatility of $\mathcal{Y}_{t_k}$.
+    \item $\mathcal{T}^{(DC)}$ is a deterministic mapping for a given pair of $\mathcal{Y}_{t_k}$ and $\delta$.
+    \item As mentioned previously, except for the very first one, the identification of a local extreme can only be made until its following trend is confirmed. In time series analysis, we say that the process of identifying local extrema uses \textit{look-ahead information}. This means that the classification of states does not happen in real time as the algorithm loops through the values in $\mathcal{Y}_{t_k}$ chronologically.
+    \item Let $\mathcal{Y}^{(I)}_{t_k}$ be the subset of $\mathcal{Y}^{(DC)}_{t_k}$ such that
+    \begin{equation*}
+        \mathcal{Y}^{(I)}_{t_k} = \{ (y_{t_i}, s) | s = \text{local extreme} \}_{i = 1, 2, \ldots, k}.
+    \end{equation*}
+    Then the timestamp set of $\mathcal{Y}^{(I)}_{t_k}$, which we denote as $t^{(I)}$, is called the \textit{Directional Change Event-based Intrinsic Time} of $\mathcal{Y}_{t_k}$ based on $\delta$. $t^{(I)}$ marks the time points of the peaks (which are also the turning points of trends) throughout $\mathcal{Y}_{t_k}$.
+\end{enumerate}
