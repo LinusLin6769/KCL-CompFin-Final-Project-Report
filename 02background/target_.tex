@@ -8,14 +8,14 @@ Building on the ML regression modelling we established in the previous section, 
     \item Choose a family of the model $f$.
     \item Decide a hyperparameter space $\phi$ to search.
     \item Conduct model selection using the validation procedure \ref{alg: validation}.
-    \item Finally, test the model with the optimal hyperparameter $\phi_{best}$ and we yield a deterministic function $f(\theta(\phi_{best})_{best})$ with its test score.
+    \item Finally, test the model with the optimal hyperparameter $\phi_{best}$ and we yield a deterministic function $f(\cdot;\theta(\phi_{best})_{best})$ with its test score.
 \end{enumerate}
 Observe that aside from our appointing the model $f$ and the hyperparameter set $\phi$, the model we obtain through the procedure relies heavily on the information contained within the dataset $\mathcal{Y}_{t_k}$ precisely because of our formulation of the modelling procedure. In other words, the utility of our model depends heavily on the information set (dataset). This gives rise to a large number of studies trying to find more clever ways to process the information before putting it into the optimisation operation with the goal of boosting model performance. Such an additional layer of operation on datasets in the modelling procedure is called \textit{data preprocessing}. Moreover, if the additional operation is performed only on the design matrix $\matr{X}$ such operations are referred to as \textit{feature engineering}\footnote{In regression operations, the columns in the design matrix are referred to as features or independent variables.}. When the operation is performed also on the target $\matr{y}$, it is called \textit{target transformation} or \textit{response transformation}\footnote{In regression operations, the target, being a column matrix, is also called the response variable or dependent variable}. In the rest of the section, we cover the technical notions of target transformation.
 
-\subsection{Implementation of Target Transformation}
+\subsection{Implementation of Target Transformation}\label{subsec: target transformation procedure}
 
 \subsubsection{Transforming the Target}
-Let $\mathcal{T}: \mathbb{R}^p \longmapsto \mathbb{R}^q$ be an arbitrary target transformation that maps a $p$ dimensional vector to another $q$ dimensional vector. Normally we have $p >= q, \; p \approx q$\footnote{If $\mathcal{T}$ reduces the dimension. This means that adopting such a target transformation reduces the data point we can use during training. Seeing that we normally prefer as many data points as possible, such loss of data points is a cost that might come with the implementation of the technique.}. Throughout the modelling procedure, target transformation is to be embedded before and possibly after every optimisation stated in Equation \ref{eq: ml training}. Consider an arbitrary optimisation in the modelling procedure to be conducted with the information set $\mathcal{Y}_{t_k} = \{ y_{t_i} \}_{i = 1, 2, \ldots, k}$, we practice
+Let $\mathcal{T}: \mathbb{R}^p \longmapsto \mathbb{R}^q$ be an arbitrary target transformation that maps a $p$ dimensional vector to a $q$ dimensional vector. Normally we have $p >= q, \; p \approx q$\footnote{If $\mathcal{T}$ reduces the dimension, this means that adopting such a target transformation reduces the data point we can use during training. For example, a five-step moving average transformation causes the loss of the first 4 datapoints. Seeing that we normally prefer as many data points as possible, such loss of data points is a cost that might come with the implementation of the technique.}. Throughout the modelling procedure, target transformation is to be embedded before and possibly after every optimisation stated in Equation \ref{eq: ml training}. Consider an arbitrary optimisation in the modelling procedure to be conducted with the information set $\mathcal{Y}_{t_k} = \{ y_{t_i} \}_{i = 1, 2, \ldots, k}$, we practice
 \begin{equation*}
     \mathcal{Y}^{'}_{t_k} = \mathcal{T}(\mathcal{Y}_{t_k})
 \end{equation*}
@@ -25,7 +25,7 @@ and use the transformed time series $\mathcal{Y}^{'}_{t_k}$ for the rest of the 
 \end{equation*}
 and perform the optimisation
 \begin{equation*}
-    \theta(\phi_0)_0 = \arg_{\theta(\phi_0)} \max \mathcal{E}(\widehat{\matr{y}^{'}_{train}}, \matr{y}^{'}_{train}), \; \widehat{\matr{y}^{'}_{train}} = f(\theta(\phi_0); \matr{X}^{'}_{train}).
+    \theta(\phi_0)_0 = \arg_{\theta(\phi_0)} \max \mathcal{E}(\widehat{\matr{y}}^{'}_{train}, \matr{y}^{'}_{train}), \; \widehat{\matr{y}}^{'}_{train} = f(\theta(\phi_0); \matr{X}^{'}_{train}).
 \end{equation*}
 After the optimisation using the transformed time series, we make the input used for generating a validation prediction
 \begin{equation*}
@@ -33,47 +33,46 @@ After the optimisation using the transformed time series, we make the input used
 \end{equation*}
 and make a prediction using the trained model
 \begin{equation*}
-    \widehat{\matr{y}^{'}_{val}} = f(\matr{X}^{'}_{val} ; \theta(\phi_0)_0).
+    \widehat{\matr{y}}^{'}_{val} = f(\matr{X}^{'}_{val} ; \theta(\phi_0)_0).
 \end{equation*}
-The usual next step is to make the validation target and validation design matrix and compute the fitness score of $\theta(\phi_0)_0$. The fitness score is computed by comparing the prediction generated by $f$ using the transformed input against a validation target\footnote{Note that $f$ operates on transformed values because it was trained on transformed values.}. We thus have
+The usual next step is to make the validation target and validation design matrix and compute the fitness score of $\theta(\phi_0)_0$. The fitness score is computed by comparing the prediction generated by $f$ using the transformed input against a validation target\footnote{Note that $f$ operates on transformed values because it was trained on transformed values.}. We can have validation target
 \begin{equation*}
     \matr{y}_{val} = y_{t_k + \tau}
 \end{equation*}
 We want to highlight that, with or without target transformation throughout the modelling process, the validation target should always be untransformed because we want to maintain the forecasting objective. Before computing the fitness score, we inevitably have to consider the question of whether $f$'s prediction using transformed input is comparable to an untransformed target. This obviously depends on the nature of the transformation $\mathcal{T}$. If the transformed prediction is uncomparable to the untransformed target, we need an additional operation to reverse the scale of the prediction generated by $f$ back to its comparable untransformed level. Such reversing operation is called the \textit{back transformation} which we cover in the next section.
 
 \subsubsection{Back Transformation}
-The major criterion causing the need of the back transformation is that $\mathcal{T}$ changes the scale of the time series, i.e., $\mathcal{Y}_{t_k}$ and $\mathcal{Y}^{'}_{t_k}$ have different scales such that $\matr{y}_{val}$ and $\widehat{\matr{y}^{'}_{val}} = f(\matr{X}^{'}_{val};\theta(\phi_0)_0)$ are incomparable. Consider $\mathcal{T}^{(b-)}$ be the corresponding back transformation operator that restores our prediction to its original comparable level. We can do
+The major criterion causing the need of the back transformation is that $\mathcal{T}$ changes the scale of the time series, i.e., $\mathcal{Y}_{t_k}$ and $\mathcal{Y}^{'}_{t_k}$ have different scales such that $\matr{y}_{val}$ and $\widehat{\matr{y}}^{'}_{val} = f(\matr{X}^{'}_{val};\theta(\phi_0)_0)$ are incomparable. Consider $\mathcal{T}^{(b-)}$ be the corresponding back transformation operator that restores our prediction to its original comparable level. We can do
 \begin{equation*}
-    \widehat{\matr{y}^{b-}_{val}} = \mathcal{T}^{(b-)}(\widehat{\matr{y}^{'}_{val}})
+    \widehat{\matr{y}}^{b-}_{val} = \mathcal{T}^{(b-)}(\widehat{\matr{y}}^{'}_{val})
 \end{equation*}
 and use this back-transformed prediction to compute the fitness score for whatever validation purposes given by
 \begin{equation*}
-    \mathcal{E}(\widehat{\matr{y}^{b-}_{val}}, \matr{y}_{val}).
+    \mathcal{E}(\widehat{\matr{y}}^{b-}_{val}, \matr{y}_{val}).
 \end{equation*}
 And that concludes the implementation of target transformation.
 
-In addition, we want to highlight some technical challenges concerning coming up with such back transformation. Intuitively, such back transformation should be based on the inverse mapping of $\mathcal{T}$. This is indeed sensible but often not sufficient because $\mathcal{Y}^{'}_{t_k}$ might not contain all the information needed to reconstruct the set $\mathcal{Y}_{t_k}$. Fortunately, we are not banned from consulting the information in $\mathcal{Y}_{t_k}$. We can thus formulate $\mathcal{T}^{(b-)}$ with the help of $\mathcal{Y}_{t_k}$. The second problem, which might be considered the major problem, is that $\mathcal{T}$ might not be invertible. In such circumstances, if resorting to numerically estimating the inverse of $\mathcal{T}$ or coming up with a sensible mapping are not feasible, then one might have to consider $\mathcal{T}$ inapplicable as a target transformation technique. The feasibility of back transformation is thus one of the main concerns when choosing the transformation techniques.
+In addition, we want to highlight some technical challenges concerning coming up with such back transformation. Intuitively, such back transformation should base on the inverse mapping of $\mathcal{T}$. This is indeed sensible but often not sufficient because $\mathcal{Y}^{'}_{t_k}$ might not contain all the information needed to reconstruct the set $\mathcal{Y}_{t_k}$. Fortunately, we are not banned from consulting the information in $\mathcal{Y}_{t_k}$. We can thus formulate $\mathcal{T}^{(b-)}$ with the help of $\mathcal{Y}_{t_k}$. The second problem, which might be considered the major problem, is that $\mathcal{T}$ might not be invertible. In such circumstances, if resorting to numerically estimating the inverse of $\mathcal{T}$ or coming up with a sensible mapping are not feasible, then one might have to consider $\mathcal{T}$ inapplicable as a target transformation technique. The feasibility of back transformation is thus one of the main concerns when choosing the transformation techniques.
 
-\subsection{An Example - Log-differencing}
-This section provides a simple demonstration of implementing a target transformation. An usual target transformation used in financial studies is the \textit{log-difference} transformation. The log-difference operation is a simulation of the net return we mentioned in Equation \ref{eq: return}. Let the log-difference operation be denoted as $\mathcal{T}^{(logr)}$ and given by\footnote{Notice that the log-difference mapping does lose one degree of dimension due to the first element in its output being undefined. This causes us to have one training instance short compared to not implementing target transformation.}
-\begin{align*}
-    &\mathcal{T}^{(logr)}(\mathcal{Y}_{t_k}) = \mathcal{Y}^{(logr)}_{t_k} \\
-    &\mathcal{Y}^{(logr)}_{t_k} = \begin{cases}
+\subsection{An Example - Log-differencing}\label{subsec: log-diff transformation}
+This section provides a simple demonstration of implementing a target transformation. An usual target transformation used in financial studies is the \textit{log-difference} transformation. It has the effect of fostering stationarity to the original time series. The log-difference operation is a mathematical simulation of the net return we mentioned in Equation \ref{eq: return}. Let the log-difference operation be denoted as $\mathcal{T}^{(logr)}$ and given by\footnote{Notice that the log-difference mapping does lose one degree of dimension due to the first element in its output being undefined. This causes us to have one training instance short compared to not implementing target transformation.}
+\begin{equation*}
+    \mathcal{Y}^{(logr)}_{t_k} = \mathcal{T}^{(logr)}(\mathcal{Y}_{t_k}) = \begin{cases}
         \emptyset                  &\text{if $i = 1$} \\
-        \log(\frac{y_i}{y_{i-1}})  &\text{if $i = 2, 3, \cdots, k$}
+        \log(\frac{y_{t_i}}{y_{t_{i-1}}})  &\text{if $i = 2, 3, \cdots, k$}
     \end{cases}
-\end{align*}
+\end{equation*}
 Observe that for an arbitrary $i \in \{2, 3, \cdots, k \}$
 \begin{equation*}
-    \lim_{R_{t_i} \rightarrow 0}{R_{t_i} - \log(\frac{y_i}{y_{i-1}}) = 0}.
+    \lim_{R_{t_i} \rightarrow 0}{R_{t_i} - \log(\frac{y_{t_i}}{y_{t_{i-1}}}) = 0}.
 \end{equation*}
-This is why log-differencing is a simulation of the net return and often is referred to as the \textit{log return} (hence our notation $logr$). Notice that $\mathcal{Y}^{(logr)}_{t_k}$ is now of a scale around $0$ despite whatever scale $\mathcal{Y}_{t_k}$ originally is. This is one of the cases where we need a complementing back transformation. We move on to generating the training target and training design matrix through
+This is why log-differencing is a mathematical simulation of the net return and often is referred to as the \textit{log return} (hence our notation $logr$). We move on to generating the training target and training design matrix through
 \begin{equation*}
     \matr{y}^{(logr)}_{train}, \; \matr{X}^{(logr)}_{train} = \mathcal{S}(\mathcal{Y}^{(logr)}_{t_k}; \tau, h, \lambda)
 \end{equation*}
 and perform the optimisation
 \begin{equation*}
-    \theta(\phi_0)_0 = \arg_{\theta(\phi_0)} \max \mathcal{E}(\widehat{\matr{y}^{(logr)}_{train}}, \matr{y}^{(logr)}_{train}), \; \widehat{\matr{y}^{(logr)}_{train}} = f(\theta(\phi_0); \matr{X}^{(logr)}_{train}).
+    \theta(\phi_0)_0 = \arg_{\theta(\phi_0)} \max \mathcal{E}(\widehat{\matr{y}}^{(logr)}_{train}, \matr{y}^{(logr)}_{train}), \; \widehat{\matr{y}}^{(logr)}_{train} = f(\theta(\phi_0); \matr{X}^{(logr)}_{train}).
 \end{equation*}
 We then make the input matrix
 \begin{equation*}
@@ -81,31 +80,31 @@ We then make the input matrix
 \end{equation*}
 and make a prediction using the trained model
 \begin{equation*}
-    \widehat{\matr{y}^{(logr)}_{val}} = f(\matr{X}^{(logr)}_{val} ; \theta(\phi_0)_0).
+    \widehat{\matr{y}}^{(logr)}_{val} = f(\matr{X}^{(logr)}_{val} ; \theta(\phi_0)_0).
 \end{equation*}
 Obtain the validation target that we use for validation
 \begin{equation*}
     \matr{y}_{val} = y_{t_k + \tau}.
 \end{equation*}
-Recall that our model operates on a $(logr)$ scale, which is not comparable to the untransformed validation target. This is where we have to devise a back transformation to bridge the spread between two incomparable scales. We can have the back transformation be denoted as $\mathcal{T}^{(b-logr)}$ and given by
+Before we go into computing the validation score, notice that despite the scale $\mathcal{Y}_{t_k}$ originally was, $\mathcal{Y}^{(logr)}_{t_k}$ is now of a scale around $0$ for the normalising effect. This is one of the cases where we need a complementing back transformation because our model operates on a $(logr)$ scale, which is not comparable to the untransformed validation target. We have to devise a back transformation to bridge the spread between two incomparable scales. We can have the back transformation be denoted as $\mathcal{T}^{(b-logr)}$ and given by
 \begin{equation}\label{eq: back log-differencing}
-    \mathcal{T}^{(b-logr)}(\widehat{y^{(logr)}_{t_{k_i}}} ;\mathcal{Y}_{t_{k_i}}) =
+    \mathcal{T}^{(b-logr)}(\widehat{y}^{(logr)}_{t_{k_i}} ;\mathcal{Y}_{t_{k_i}}) =
     \begin{cases}
         y_{t_1}                                                   &\text{if $i = 1$} \\
-        e^{\widehat{y^{(logr)}_{t_{k_i}}}} \times y_{t_{k_{i-1}}} &\text(otherwise)
+        e^{\widehat{y}^{(logr)}_{t_{k_i}}} \times y_{t_{k_{i-1}}} &\text(otherwise)
     \end{cases}.
 \end{equation}
 Then we back-transform the prediction
 \begin{equation*}
-    \widehat{\matr{y}^{(b-logr)}_{val}} = \mathcal{T}^{(b-logr)}(\widehat{\matr{y}^{(logr)}_{val}} ;\mathcal{Y}_{t_k})
+    \widehat{\matr{y}}^{(b-logr)}_{val} = \mathcal{T}^{(b-logr)}(\widehat{\matr{y}}^{(logr)}_{val} ;\mathcal{Y}_{t_k})
 \end{equation*}
 to use it for fitness computing
 \begin{equation*}
-    \mathcal{E}(\widehat{\matr{y}^{(b-logr)}_{val}}, \matr{y}_{val}).
+    \mathcal{E}(\widehat{\matr{y}}^{(b-logr)}_{val}, \matr{y}_{val}).
 \end{equation*}
-And that concludes the implementation of log-difference target transformation in a single optimisation operation. Observe that log-differencing is essentially an invertible function. However, note that the construction of the back transformation in Equation \ref{eq: back log-differencing} involves the use of a subset of the original training set $\mathcal{Y}_{t_{k_i}}$. This is because $\mathcal{T}^{(logr)}$ retains only the relative information among the values of the original time series\footnote{Log-differencing does not keep track of the original level of the values. We can only induce their relative change with respect to others from its output set.}. Therefore, it is not possible to reconstruct the original scale just by using $\mathcal{Y}^{(logr)}_{t_k}$. We hope this demonstration provides a vivid image of how target transformation is implemented.
+And that concludes the implementation of log-difference target transformation in a single optimisation operation. Observe that log-differencing is essentially an invertible function. However, the construction of the back transformation in Equation \ref{eq: back log-differencing} involves the use of a subset of the original training set $\mathcal{Y}_{t_{k_i}}$. This is because $\mathcal{T}^{(logr)}$ retains only the relative information among the values of the original time series\footnote{Log-differencing does not keep track of the original level of the values. We can only induce their relative change with respect to others from its output set.}. Therefore, it is not possible to reconstruct the original scale just by using $\mathcal{Y}^{(logr)}_{t_k}$. We hope this demonstration provides a vivid image of how target transformation is implemented.
 
 \subsection{Discussions}
 In this section, we discussion some notions concerning target transformation. Given a modelling procedure, implementing target transformation can further complex the whole process. In particular, transformations are often parameterised as they essentially are functions. Trying to find the optimal parameters for the transformation can make the training process much more expensive. Let $\omega$ be the set of parameters characterising a transformation. As $\omega$ does not belongs to $\theta$ that determinstically effects the output of $f$, $\omega$ has to be considered as a part of the hyperparameters $\phi$ just like modelling configurations such as sliding window size $\lambda$. Including $\omega$ increases the dimension of $\phi$ and further enlarge the hyperparameter space to search during model selection. This is a potential cost in terms of training efficiency when implementing target transformation.
 
-As we will cover in the later Section \ref{sec: target transformation}, there exists numerous target transformation methods all dealing with different types of problems. In common practice, it is not rare that the target transformation $\mathcal{T}$ consists of multiple functions chained together in order to solve multiple problems induced by the dataset. In these situations, such chain of operations have to be organised properly, for instance, in terms of their order, as their effects might influence one another. Last but not least, as mentioned in Section \ref{subsubsec: data leakage}, increasing the complexity of the modelling process can increase the risk of data leakage and this certainly applies to implementing target transformation as well. Modeller should be extra careful in the design and implementation in this regard.
+As we will cover in the later Section \ref{sec: target transformation}, there exists numerous target transformation methods that deal with different types of problems. In common practice, it is not rare that the target transformation $\mathcal{T}$ consists of multiple functions chained together in order to solve multiple problems induced by the dataset. In these situations, such chain of operations have to be organised properly, for instance, in terms of their order, as their effects might influence one another. Last but not least, as mentioned in Section \ref{subsubsec: data leakage}, increasing the complexity of the modelling process can increase the risk of data leakage and this certainly applies to implementing target transformation as well. Modeller should be extra careful in the design and implementation in this regard.

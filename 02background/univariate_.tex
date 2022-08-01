@@ -4,7 +4,7 @@ In this section, we discuss the topic of univariate time series forecasting.
 \subsection{General Notions of Time Series Forecasting}
 A time series is a sequential collection of random variables indexed by time. If the random variables are of one dimension, then time series is considered univariate\footnote{If the random variables are of dimension higher than one, then the time series is considered multivariate. Datasets in such form are also referred to as panel data.}. In this section, the discussions fall within the context of univariate time series forecasting. Let $Y = \{Y_{t_i} \}_{i = 1, 2, \ldots, n}$ be an univariate time series with $ Y_{t_i} \in \mathbb{R}, \; \forall i, \; n \in \mathbb{N}$ and $t = \{t_i \}_{i = 1, 2, \ldots, n}$ being the set of time indices of $Y$ (also referred to as the set of timestamps). Let $\mathcal{Y}_{t_k}$ be the largest information set about $Y$ that is accessible to the model at time point $t_k \in t$, e.g., we might have the observations of $Y$ being known ($\{Y_{t_j} = y_{t_j}\}_{j = 1, 2, \ldots, k } \subset \mathcal{Y}_{t_k}$). Then in the context of modelling, for an unknown (random) target $Y_{t_s}$ with $s > k, \; s \in \mathbb{N}$, we can articulate the notion of forecasting as the following:
 \begin{displayquote}
-    Forecasting the value $Y_{t_s}$ at time point $t_k$ is to find a function $f(\mathcal{Y}_{t_k}) = \widehat{Y_{t_s}}$, such that $\widehat{Y_{t_s}}$ is a good estimation of $Y_{t_s}$.
+    Forecasting the value $Y_{t_s}$ at time point $t_k$ is to find a function $f(\mathcal{Y}_{t_k}) = \widehat{Y}_{t_s}$, such that $\widehat{Y}_{t_s}$ is a good estimation of $Y_{t_s}$.
 \end{displayquote}
 We can develop all sorts of functions $f$ for such forecasting objectives. Functions devised to serve the objective are referred to as models. In a general sense, the notion of modelling refers to the methodologies of devising a model that serves the objective well. In particular, for any arbitrary pair of $t_k$ and $t_s$, we want to have a model $f(\mathcal{Y}_{t_k})$ such that it gives us a reliable estimation of $Y_{t_s}$.
 
@@ -39,7 +39,7 @@ R_{t_i} = \frac{Y_{t_i} - Y_{t_{i-1}}}{Y_{t_{i-1}}}, \quad i \in \{2, 3, \cdots,
 \end{equation}
 The net return $R_{t_i}$ at time $t_i$ is thus the relative price change of $Y_{t_i}$ over the time period $t_i - t_{i-1}$ with respect to $Y_{t_{i-1}}$. Let $R = \{ R_{t_i} \}_{i = 2, 3, \ldots, n}$ be the time series of one-step net returns derived from $Y$. If $t$ is equally spaced by, say, a day, the time series $Y$ is time-homogeneous. The time series $R$ we calculated is a time series of daily net return of $Y$. Nevertheless, in the case where $t$ is not equally spaced, the time series $Y$ is time heterogeneous. Then we no longer have an unified interpretation of the net returns $R$ we calculated from the time series $Y$. This is an example of how time heterogeneity can complicate time series analyses. Time heterogeneity in finance has been studied a lot due to the nature of financial markets. The popularisation of electronic systems in financial activities is also a huge contributing factor to time heterogeneity in finance. See Dacarogna et al. (\citeyear{genccay2001introduction}) for more information.
 
-\subsection{Machine Learning Regression Modelling}
+\subsection{Machine Learning Regression Modelling}\label{subsec: ML modelling}
 In this section, we further discuss univariate time series modelling and address how we approach the articulated forecasting objective with Machine Learning (ML) regression modelling. In addition to addressing the approach, we also provide relevant statistical notions that can be seen as the underlying theoretical foundation of the standard machine learning procedure.
 
 Recall the forecasting objective is to come up with a model $f$ capable of generating `good' estimations of some target $Y_{t_s}$ at time $t_k$ using the provided information $\mathcal{Y}_{t_k}$. We will see in the later paragraphs that this is very similar to the process of solving for a Quasi-Maximum Likelihood Estimation (QMLE) in a statistical sense (White (\citeyear{white1982maximum})). In the context of modelling, the procedure is normally to gather the available information and formulate it into an optimisation problem: we define a fitness measure (like the `L' in QMLE), which should be a function of the estimates $f(\mathcal{Y}_{t_k})$ and the target, and we then optimise the fitness as an objective function with respect to the model $f$ in some algorithmic way (the `M' in QMLE). The final output of such a procedure will be a model (function $f$) that optimally serves our objective (the `E' in QMLE). In the remainder of this section, we discuss the general framework of how the procedure works.
@@ -113,11 +113,11 @@ In the phase of training a model using $\mathcal{Y}_{t_k}$, notice that we have 
     \State{Let $s = k - \lambda + 1 - v$ be the first index of the validation set.}
     \For{$ i \in \{0, 1, 2, \cdots, v-1 \}$}
         \State{$\matr{y}_{train}, \matr{X}_{train} \leftarrow \mathcal{S}(\mathcal{Y}_{t_{s-1+i}}; \tau, h=1, \lambda)$}
-        \State{Do training: $\theta(\phi_0)_0 \leftarrow \arg_{\theta(\phi_0)} \max \mathcal{E}(\widehat{\matr{y}_{train}}, \matr{y}_{train}), \; \widehat{\matr{y}_{train}} = f(\theta(\phi_0); \matr{X}_{train})$}
+        \State{Do training: $\theta(\phi_0)_0 \leftarrow \arg_{\theta(\phi_0)} \max \mathcal{E}(\widehat{\matr{y}}_{train}, \matr{y}_{train}), \; \widehat{\matr{y}}_{train} = f(\theta(\phi_0); \matr{X}_{train})$}
         \State{$\matr{X}_{val}  \leftarrow \{y_{t_{s + i - \tau + j}}\}_{j = 0, 1, \ldots, \lambda-1}$}
-        \State{Make prediction: $\widehat{\matr{y}_{val}} \leftarrow f(\matr{X}_{val}; \theta(\phi_0)_0)$}
+        \State{Make prediction: $\widehat{\matr{y}}_{val} \leftarrow f(\matr{X}_{val}; \theta(\phi_0)_0)$}
         \State{$\matr{y}_{val}  \leftarrow y_{t_{s + i}}$ (validation target)}
-        \State{Compute fitness score for the $\theta(\phi_0)_0$: $\nu \leftarrow \mathcal{E}(\widehat{\matr{y}_{val}}, \matr{y}_{val})$}
+        \State{Compute fitness score for the $\theta(\phi_0)_0$: $\nu \leftarrow \mathcal{E}(\widehat{\matr{y}}_{val}, \matr{y}_{val})$}
         \State{Store the fitness score $\nu$ in list $L$}
     \EndFor
     \State{Let $V_{\phi_0} \equiv \frac{1}{v}\sum{L}$ be the mean of the scores stored in list $L$.}

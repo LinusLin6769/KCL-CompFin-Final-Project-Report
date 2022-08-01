@@ -1,4 +1,4 @@
-\begin{thebibliography}{49}
+\begin{thebibliography}{54}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -29,6 +29,13 @@ N.~Ahmed, A.~Atiya, N.~Gayar, and H.~El-Shishiny.
 \newblock \emph{Econometric Reviews}, 29:\penalty0 594--621, 08 2010.
 \newblock URL
   \url{https://www.tandfonline.com/doi/abs/10.1080/07474938.2010.481556}.
+
+\bibitem[Akima(1970)]{akima1970new}
+H.~Akima.
+\newblock A new method of interpolation and smooth curve fitting based on local
+  procedures.
+\newblock \emph{Journal of the ACM (JACM)}, 17\penalty0 (4):\penalty0 589--602,
+  1970.
 
 \bibitem[Aloud et~al.(2012)Aloud, Tsang, Olsen, and
   Dupuis]{aloud2012directional}
@@ -192,11 +199,25 @@ R.~Hyndman and G.~Athanasopoulos.
 \newblock URL \url{OTexts.com/fpp3}.
 \newblock Accessed in June 2022.
 
+\bibitem[Hyndman et~al.(2008{\natexlab{a}})Hyndman, Koehler, Ord, and
+  Snyder]{hyndman2008forecasting}
+R.~Hyndman, A.~B. Koehler, J.~K. Ord, and R.~D. Snyder.
+\newblock \emph{Forecasting with exponential smoothing: the state space
+  approach}.
+\newblock Springer Science \& Business Media, 2008{\natexlab{a}}.
+
 \bibitem[Hyndman and Koehler(2006)]{hyndman2006another}
 R.~J. Hyndman and A.~B. Koehler.
 \newblock Another look at measures of forecast accuracy.
 \newblock \emph{International journal of forecasting}, 22\penalty0
   (4):\penalty0 679--688, 2006.
+
+\bibitem[Hyndman et~al.(2008{\natexlab{b}})Hyndman, Akram, and
+  Archibald]{hyndman2008admissible}
+R.~J. Hyndman, M.~Akram, and B.~C. Archibald.
+\newblock The admissible parameter space for exponential smoothing models.
+\newblock \emph{Annals of the Institute of Statistical Mathematics},
+  60\penalty0 (2):\penalty0 407--426, 2008{\natexlab{b}}.
 
 \bibitem[Hämäläinen and Kärkkäinen(2020)]{inproceedings}
 J.~Hämäläinen and T.~Kärkkäinen.
@@ -209,6 +230,11 @@ S.~M. Kay and S.~L. Marple.
 \newblock Spectrum analysis—a modern perspective.
 \newblock \emph{Proceedings of the IEEE}, 69\penalty0 (11):\penalty0
   1380--1419, 1981.
+
+\bibitem[Kingma and Ba(2014)]{kingma2014adam}
+D.~P. Kingma and J.~Ba.
+\newblock Adam: A method for stochastic optimization.
+\newblock \emph{arXiv preprint arXiv:1412.6980}, 2014.
 
 \bibitem[Koning et~al.(2005)Koning, Franses, Hibon, and Stekler]{KONING2005397}
 A.~J. Koning, P.~H. Franses, M.~Hibon, and H.~Stekler.
@@ -259,6 +285,14 @@ J.~Osborne.
   transformation.
 \newblock \emph{Practical Assessment, Research, and Evaluation}, 15\penalty0
   (1):\penalty0 12, 2010.
+
+\bibitem[Pedregosa et~al.(2011)Pedregosa, Varoquaux, Gramfort, Michel, Thirion,
+  Grisel, Blondel, Prettenhofer, Weiss, Dubourg, et~al.]{pedregosa2011scikit}
+F.~Pedregosa, G.~Varoquaux, A.~Gramfort, V.~Michel, B.~Thirion, O.~Grisel,
+  M.~Blondel, P.~Prettenhofer, R.~Weiss, V.~Dubourg, et~al.
+\newblock Scikit-learn: Machine learning in python.
+\newblock \emph{the Journal of machine Learning research}, 12:\penalty0
+  2825--2830, 2011.
 
 \bibitem[Percival and Walden(2000)]{percival2000wavelet}
 D.~B. Percival and A.~T. Walden.

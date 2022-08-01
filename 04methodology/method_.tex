@@ -1,0 +1,171 @@
+\chapter{Methodology}\label{ch: methodology}
+In this chapter, we cover the technical details of our proposed target transformation technique based on the DC intrinsic time framework in Section \ref{sec: dc transformation}. Then in Section \ref{sec: experiment}, we address the experiment we design for the evaluation of the transformation.
+
+\section{DC Target Transformation}\label{sec: dc transformation}
+Our proposed target transformation is called \textit{Directional Change (DC) Transformation}. The DC Transformation is a chain of operations to be embedded as the general target transformation procedure introduced in Section \ref{subsec: target transformation procedure}. Recall the log-difference transformation $\mathcal{T}^{(logr)}$ and DC algorithm $\mathcal{A}^{(DC)} (\cdot; \delta, \mathcal{R} (x; y))$ we addressed earlier. Then for an arbitrary optimisation in the modelling procedure to be conducted with time series $\mathcal{Y}_{t_k} = \{y_{t_i}\}_{i = 1, 2, \ldots, k}$ and its timestamp set be $t$, DC Transformation goes as the following.
+
+We start by performing DC classification algorithm for a given $\delta$ and $\mathcal{R}$
+\begin{equation*}
+    \mathcal{Y}^{(DC)}_{t_k} = \mathcal{A}^{(DC)} (\mathcal{Y}_{t_k}; \delta, \mathcal{R} (x; y)).
+\end{equation*}
+Let $\mathcal{Y}^{(E)}_{t_k}$ be a subset of $\mathcal{Y}^{(DC)}_{t_k}$ such that
+\begin{equation*}
+    \mathcal{Y}^{(E)}_{t_k} = \{(y_{t_i}, s) | s = \text{local extreme} \vee \text{DC confirmation} \}_{t_i \in t}
+\end{equation*}
+and its timestamp set being $t^{(E)}$. With $\mathcal{Y}^{(E)}_{t_k} \subset \mathcal{Y}^{(DC)}_{t_k}$, we look at the $y_{t_i}$ values and perform interpolation by filling in the intervals where $t_i \in t - t^{(E)}$. Note that the states assigned by $\mathcal{A}^{(DC)}$ are preserved and left unchanged because we are only operating on the values. Let $\mathcal{I} (\mathcal{Y}^{(E)}_{t_k}, \mathcal{Y}^{(DC)}_{t_k})$ be an interpolation operation such that we have a new set given by
+\begin{equation*}
+    \mathcal{Y}^{(EI)}_{t_k} = \mathcal{I} (\mathcal{Y}^{(E)}_{t_k}, \mathcal{Y}^{(DC)}_{t_k}) = \begin{cases}
+        (y_{t_i}, s)          &\text{if $t_i \in t - t^{(E)}$} \\
+        (y^{(I)}_{t_i}, s)    &\text{if $t_i \notin t - t^{(E)}$}
+    \end{cases}, \; \forall i \in \{1, 2, \cdots, k\}
+\end{equation*}
+with $y^{(I)}_{t_i}$ being the interpolated values according to interpolation $\mathcal{I}$. Let $y^{(EI)}_{t_i}$ denotes the values carried by the instances in $\mathcal{Y}^{(EI)}_{t_k}$ for all $i \in \{ 1, 2, \cdots, k\}$. After the interpolation, $\langle \mathcal{Y}^{(EI)}_{t_k} \rangle = \langle \mathcal{Y}_{t_k} \rangle$.
+We then perform log-diffence target transformation to the $y^{(EI)}_{t_i}$ values as introduced in Section \ref{subsec: log-diff transformation} and have
+\begin{equation*}
+    \mathcal{Y}^{(logrEI)}_{t_k} = \mathcal{T}^{(logr)}(\mathcal{Y}^{(EI)}_{t_k}) = \begin{cases}
+        (\emptyset, s)  &\text{if $i = 1$} \\
+        (\log(\frac{y^{(EI)}_{t_i}}{y_{t^{(EI)}_{i-1}}}), s) &\text{if $i = 2, 3, \cdots, k$}
+    \end{cases}.
+\end{equation*}
+Let $y^{(logrEI)}_{t_i}$ denotes the values carried by the instances in $\mathcal{Y}^{(logrEI)}_{t_k}$, we can then generate the training target and training design matrix with the $y^{(logrEI)}_{t_i}$ values
+\begin{gather*}
+    \matr{y}^{(logrEI)}_{train}, \; \matr{X}^{(logrEI)}_{train} = \mathcal{S} (\mathcal{Y}^{(logrEI)}_{t_k} ; \tau, h=1, \lambda) \\
+    \matr{y}^{(logrEI)}_{train} = \begin{bmatrix}
+        y^{(logrEI)}_{t_\lambda}       \\
+        y^{(logrEI)}_{t_{\lambda + 1}} \\
+        \cdot               \\
+        \cdot               \\
+        y^{(logrEI)}_{t_{k-1}}         \\
+        y^{(logrEI)}_{t_k}             \\
+    \end{bmatrix}
+    , \quad
+    \matr{X}^{(logrEI)}_{train} = \begin{bmatrix}
+        y^{(logrEI)}_{t_{\lambda} - \tau}   & y^{(logrEI)}_{t_{\lambda-1} - \tau} & \cdots & y^{(logrEI)}_{t_{1}} \\
+        y^{(logrEI)}_{t_{\lambda+1} - \tau} & y^{(logrEI)}_{t_{\lambda} - \tau}   & \cdots & y^{(logrEI)}_{t_{2}} \\
+        \cdot                    & \cdot                    & \cdots & \cdot     \\
+        \cdot                    & \cdot                    & \cdots & \cdot     \\
+        y^{(logrEI)}_{t_{k-1} - \tau}       & y^{(logrEI)}_{t_{k-2} - \tau}       & \cdots & y^{(logrEI)}_{t_{k - \lambda} - \tau}     \\
+        y^{(logrEI)}_{t_{k} - \tau}         & y^{(logrEI)}_{t_{k-1} - \tau}       & \cdots & y^{(logrEI)}_{t_{k - \lambda + 1} - \tau} \\
+    \end{bmatrix}.
+\end{gather*}
+Before the optimisation, we also introduce a feature generation measure utlising the classification produced by $\mathcal{A}^{(DC)}$. For an instance $y^{(logrEI)}_{t_i}$ in the training target $\matr{y}^{(logrEI)}_{train}$, it was assigned a state $s$ that was stored in $\mathcal{Y}^{(logrEI)}_{t_k}$ as the second element in the corresponding tuple. Since $s$ is an categorical variable with seven possible outcomes as listed in Section \ref{subsec: dc algo}, it is not sensible to just introduce it as an additional feature used in predicting. We thus use \textit{one-hot encoding} for the categorical variable $s$. For $\matr{y}^{(logrEI)}_{train}$ having $k - \lambda - 1$ entries, we can have a $k - \lambda - 1$ by seven matrix with each row being the one-hot encoded vector of the corresponding $s$ assigned to the target entry. We concatenate the one-hot encode matrix on the right side of $\matr{X}^{(logrEI)}_{train}$ and have a new design matrix $\matr{X}^{(SlogrEI)}$ with the one-hot encoded states. We then conduct the optimisation to find the optimal parameter $\theta$ for the given hyperparameter $\phi_0$
+\begin{equation*}
+    \theta(\phi_0)_0 = \arg_{\theta(\phi_0)} \max \mathcal{E}(\widehat{\matr{y}}^{(SlogrEI)}_{train}, \matr{y}^{(logrEI)}_{train}), \; \widehat{\matr{y}}^{(SlogrEI)}_{train} = f(\theta(\phi_0); \matr{X}^{(SlogrEI)}_{train}).
+\end{equation*}
+After having the model, we make the input matrix also with the one-hot encoded state information and denote as\footnote{$\matr{X}^{(SlogrEI)}_{val}$ is of shape $1$ by the number of lags plus seven.}
+\begin{equation*}
+    \matr{X}^{(SlogrEI)}_{val}
+\end{equation*}
+and make a prediction using the trained model
+\begin{equation*}
+    \widehat{\matr{y}}^{(SlogrEI)}_{val} = f(\matr{X}^{(SlogrEI)}_{val} ; \theta(\phi_0)_0).
+\end{equation*}
+Obtain the validation target that we need for validation
+\begin{equation*}
+    \matr{y}_{val} = y_{t_k + \tau}.
+\end{equation*}
+Since the operations related to DC framework do not contribute to the transformed prediction not being comparable to the original level, we only have to back-transform the change of scale introduced by log-differencing. Let the back transformation of log-differencing be denoted as $\mathcal{T}^{(b-logr)}$ and we have
+\begin{equation*}
+    \widehat{\matr{y}}^{(b-SlogrEI)}_{val} = \mathcal{T}^{(b-logr)} (\widehat{\matr{y}}^{(SlogrEI)}_{val} ; \mathcal{Y}_{t_k}).
+\end{equation*}
+Finally, we compute the fitness score using the back-transformed prediction and the validation target by
+\begin{equation*}
+    \mathcal{E} (\widehat{\matr{y}}^{(b-SlogrEI)}_{val}, \matr{y}_{val}).
+\end{equation*}
+And that concludes the whole implementation of DC Transformation in a single optimisation task in the modelling procedure.
+
+Let $\mathcal{T}^{(DC)}$ denotes the DC Transformation. $\mathcal{T}^{(DC)}$ is parameterised by the pair of threshold values $\theta$, the movement measure $\mathcal{R}$ and the interpolation method $\mathcal{I}$. As to back transformation, applying $\mathcal{T}^{(DC)}$ needs the log-differencing back transformation.
+
+\section{Experiment}\label{sec: experiment}
+In this section, we discuss the experiment we conducted to verify whether our proposed DC Transformation does have a positive effect on univariate time series forecasting. The effectiveness of a target transformation technique can be influenced by both the complementing model (the $f$ used) and the dataset. With the goal of obtaining robust and objective results, we experiment with different types of models that can be used for univariate time series forecasting and a large number of time series.
+
+\subsection{Models}\label{subsec: models}
+In this section, we cover the models we used and the hyperparameters we tuned in our experiment. The hyperparameter sapce that we searched is provided in Table \ref{tbl: hyper space}. For the discussion in the rest of this section, consider $\matr{y}$ and $\matr{X}$ an arbitrary pair of target and design matrix with $n$ rows (instances), $\phi$ as the hyperparameter set, and $\theta$ the parameter set for the model.
+
+\subsubsection{Elastic Net Regression Model}
+We use Elastic Net (EN) as our representative for linear regression methodologies. EN can be written as
+\begin{gather*}
+    f^{(EN)} (\matr{X} ; \theta = (\matr{w}, \matr{\beta})) = \matr{X} \matr{w} + \matr{\beta} = \widehat{\matr{y}}.
+\end{gather*}
+The structure and determination of $\theta$ is controlled by hyperparameters $\phi = (l, \alpha, \rho)$ and the optimisation
+\begin{equation*}
+    \theta_{OLS} = \arg_{\theta} \min \frac{1}{2n} L_2(\matr{X} \matr{w} + \matr{\beta} - \matr{y}) + \alpha \rho L_1(\matr{w}) + \frac{\alpha (1 - \rho)}{2} L_2(\matr{w})
+\end{equation*}
+where
+\begin{itemize}
+    \item $n$ is the number of training instances, i.e., the length of $\matr{y}$,
+    \item $l$ is the number of lags. As mentioned in Section \ref{subsec: ML modelling}, the bigger $l$ is, the more past information the model is allowed to use for a single prediction. $l$ also effects the length of the weight vector $\matr{w}$.
+    \item $\alpha > 0, \; \alpha \in \mathbb{R}$ is the regularisation constant determining the scale of the penalty.
+    \item $L_1$ and $L_2$ are L1 and L2 norm respectively.
+    \item $\rho \in [0, 1]$ is the weight assigned to $L_1$ penalty.
+\end{itemize}
+The resulting parameter $\theta_{OLS}$ of the model $f^{(EN)}(\cdot ; \theta_{OLS})$ is the \textit{Ordinary Least Square} estimation.
+
+\subsubsection{Multilayer Perceptron Regressor}
+To have a non-linear regression model, we chose the Multilayer Perceptron (MLP) regressor. MLP is controlled by $\phi = (l, strucs, max iter)$ where
+\begin{itemize}
+    \item $l$ is the number of lags,
+    \item $strucs$ is a tuple. Element number $i$ in $stucs$ determines the number of hidden neurons in hidden layer $i$. For example, $strucs = (5, 10)$ means the MLP has two hidden layers with the first having five hidden neurons and the second having ten.
+    \item $max iter$ is the maximum iterations the solver is allowed to go through.
+\end{itemize}
+For every neuron in the MLP model, it is a linear combination of an input vector $\mathbb{R}^m \longmapsto \mathbb{R}$. Depending on the dimension of the input, i.e., $m$, a neuron is parameterised by a $m$ dimension weight vector. These neurons form a neural network, which is a non-linear function of the input vector. The weights are trained using a variant of stochastic gradient descent solver (see Kingma et al. \citeyear{kingma2014adam}).
+
+\subsubsection{Linear Support Vector Regressor}
+Linear Support Vector Regressor (LSVR) is a member of the \textit{Kernel Methods} that uses a linear kernel for regression problems. We chose LSVR for its faster implementation than typical SVR with other kernels. LSVR $f^{(LSVR)}$ is parameterised by $\theta = (\matr{w}, \matr{b})$ much like a linear regression model
+\begin{equation*}
+    f^{(LSVR)} (\matr{X} ; \theta = (\matr{w}, \matr{b})) = \matr{X} \matr{w} + \matr{b} = \widehat{\matr{y}}.
+\end{equation*}
+where $\theta$ is decided by solving the optimisation problem
+\begin{equation*}
+    \theta_{best} = \arg_{\theta = (\matr{w}, \matr{b})} \min (\frac{1}{2} L_2(\matr{w}) + C \sum_{i=1}^{n} \max(0, |\matr{y}_i - (\matr{w}^T I(\matr{X_i}) + b)| - \epsilon))
+\end{equation*}
+where
+\begin{itemize}
+    \item $L_2$ is the L2 norm.
+    \item $I$ is the identity function.
+    \item $\epsilon$ characterises the \textit{Vapnik's $\epsilon$-insensitive loss function} that makes a `tube' with radius $\epsilon$ around the target $\matr{y}$. The decision of this value should depend on the scale of $\matr{y}$. We have it defaulted to $0$ as suggested by \href{https://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVR.html#sklearn.svm.LinearSVR}{scikit learn}.
+\end{itemize}
+The hyperparameter set characterising the desicion of $\theta$ we tune is $\phi = (l, tol, C)$ where
+\begin{itemize}
+    \item $l$ is the number of lags,
+    \item $tol$ is the tolerance for the stopping condition during the,
+    \item $C$ is the regularisation constant similar to $\alpha$ for EN. However, by the implementation, $C$ is inversely proportional to the strength of the penalty.
+\end{itemize}
+
+\subsubsection{Random Forest Regressor}
+Our representitive for tree-based models is Random Forest Regressor (RF) because it trains faster than other tree-based methods, such as Gradient Booosting Machine or even Light Gradient Boosting Machine. RF is an ensemble method that applies \textit{Bootstrap Aggregation (Bagging)} method on both the training instances and the features. In other words, the trees in the ensemble are trained on different training instances and also different features. Bagging on features is applied randomly. Such method is called the \textit{random subspace method}. The hyperparameter set we tuned is $\phi = (l, min sample split)$ where
+\begin{itemize}
+    \item $l$ is the number of lags.
+    \item $min sample split$ sets the minimum number of samples required to split an existing node. The value is negatively correlated to the probability of the model overfitting.
+\end{itemize}
+The parameter $\theta$ is a combination of decision criteria of the decision trees in the ensemble.
+
+\subsubsection{Exponential Smoothing Forecasting Model}
+Exponential Smoothing (ETS) is not a regression model, as in, it does not estimate its parameters with our target $\matr{y}$ and design matrix $\matr{X}$ environment. ETS trains directly on the univariate time series $\mathcal{Y}_{t_k} = \{ y_{t_i}\}_{i = 1, 2, \ldots, k}$. ETS has many variants. The one we used here is based on the implementation of \href{https://www.rdocumentation.org/packages/forecast/versions/8.12/topics/ets}{R Version of ETS} (see Hyndman et al. \citeyear{hyndman2008admissible} and Hyndman et al. \citeyear{hyndman2008forecasting}). This version of ETS implicitly tunes the hyperparameter $\phi = (trend, seasonal, damped)$ where
+\begin{itemize}
+    \item $trend \in \{ \text{additive}, \text{multiplicative} \}$ is a binary variable setting whether the trend component in the model is additive or multiplicative.
+    \item $seasonal \in \{ \text{additive}, \text{multiplicative} \}$ is a binary variable setting whether the seasonal component in the model is additive or multiplicative.
+    \item $damped \in \{ \text{True}, \text{False} \}$ is a binary variable setting whether the damped trend methods is applied. The damped trend methods dampens the trend component to a constant into the future to prevent the model from over-forecasting for future values.
+\end{itemize}
+
+\begin{center}
+    \begin{table}
+        \begin{tabular}{|c c c c|} 
+            \hline
+            Col1 & Col2 & Col2 & Col3 \\
+            \hline\hline
+            1 & 6 & 87837 & 787 \\ 
+            \hline
+        \end{tabular}
+        \caption{Table to test captions and labels.}
+        \label{tbl: hyper space}
+    \end{table}
+\end{center}
+
+\subsubsection{Moving Average}
+
+\subsection{Agents}
+
+\subsection{Performance Measure}
+
+\subsection{Dataset}
