@@ -58,6 +58,7 @@
 
 % ---------------------------------------------
 % document
+%TC:ignore
 \begin{document}
 
 \graphicspath{{./references/images/}}
@@ -106,6 +107,7 @@
 
 % ----------------------------------------------
 % here goes the main context
+%TC:endignore
 \pagestyle{fancy}
 \fancyhead[R]{\thepage}
 \fancyfoot{}
@@ -120,11 +122,11 @@
 
 \input{./04methodology/method_.tex}
 
-\chapter{Results and Evaluation}
+\input{./05result_evaluation/result_eval.tex}
 
 \chapter{Conclusion}
 
-
+%TC:ignore
 \newpage
 \bibliographystyle{abbrvnat}
 \bibliography{./references/refs}
@@ -135,5 +137,7 @@
 
 \appendix
 \input{./appendix/hyper_space.tex}
+% one-hot encoding
+%TC:endignore
 
 \end{document}
