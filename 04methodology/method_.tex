@@ -12,7 +12,7 @@ Let $\mathcal{Y}^{(E)}_{t_k}$ be a subset of $\mathcal{Y}^{(DC)}_{t_k}$ such tha
 \begin{equation*}
     \mathcal{Y}^{(E)}_{t_k} = \{(y_{t_i}, s) | s = \text{local extreme} \vee \text{DC confirmation} \}_{t_i \in t}
 \end{equation*}
-and its timestamp set being $t^{(E)}$. With $\mathcal{Y}^{(E)}_{t_k} \subset \mathcal{Y}^{(DC)}_{t_k}$, we look at the $y_{t_i}$ values and perform interpolation by filling in the intervals where $t_i \in t - t^{(E)}$. Note that the states assigned by $\mathcal{A}^{(DC)}$ are preserved and left unchanged because we are only operating on the values. Let $\mathcal{I} (\mathcal{Y}^{(E)}_{t_k}, \mathcal{Y}^{(DC)}_{t_k})$ be an interpolation operation such that we have a new set given by
+and its timestamp set being $t^{(E)}$. With $\mathcal{Y}^{(E)}_{t_k} \subset \mathcal{Y}^{(DC)}_{t_k}$, we look at the $y_{t_i}$ values of $\mathcal{Y}^{(E)}_{t_k}$ and perform interpolation by filling in the intervals where $t_i \in t - t^{(E)}$. Note that the states assigned by $\mathcal{A}^{(DC)}$ are preserved and left unchanged because we are only operating on the values. Let $\mathcal{I} (\mathcal{Y}^{(E)}_{t_k}, \mathcal{Y}^{(DC)}_{t_k})$ be an interpolation operation such that we have a new set given by
 \begin{equation*}
     \mathcal{Y}^{(EI)}_{t_k} = \mathcal{I} (\mathcal{Y}^{(E)}_{t_k}, \mathcal{Y}^{(DC)}_{t_k}) = \begin{cases}
         (y_{t_i}, s)          &\text{if $t_i \in t - t^{(E)}$} \\
@@ -48,7 +48,7 @@ Let $y^{(logrEI)}_{t_i}$ denotes the values carried by the instances in $\mathca
         y^{(logrEI)}_{t_{k} - \tau}         & y^{(logrEI)}_{t_{k-1} - \tau}       & \cdots & y^{(logrEI)}_{t_{k - \lambda + 1} - \tau} \\
     \end{bmatrix}.
 \end{gather*}
-Before the optimisation, we also introduce a feature generation measure utlising the classification produced by $\mathcal{A}^{(DC)}$. For an instance $y^{(logrEI)}_{t_i}$ in the training target $\matr{y}^{(logrEI)}_{train}$, it was assigned a state $s$ that was stored in $\mathcal{Y}^{(logrEI)}_{t_k}$ as the second element in the corresponding tuple. Since $s$ is an categorical variable with seven possible outcomes as listed in Section \ref{subsec: dc algo}, it is not sensible to just introduce it as an additional feature used in predicting. We thus use \textit{one-hot encoding} for the categorical variable $s$. For $\matr{y}^{(logrEI)}_{train}$ having $k - \lambda - 1$ entries, we can have a $k - \lambda - 1$ by seven matrix with each row being the one-hot encoded vector of the corresponding $s$ assigned to the target entry. We concatenate the one-hot encode matrix on the right side of $\matr{X}^{(logrEI)}_{train}$ and have a new design matrix $\matr{X}^{(SlogrEI)}$ with the one-hot encoded states. We then conduct the optimisation to find the optimal parameter $\theta$ for the given hyperparameter $\phi_0$
+Before the optimisation, we also introduce a feature generation measure utlising the classification produced by $\mathcal{A}^{(DC)}$. For an instance $y^{(logrEI)}_{t_i}$ in the training target $\matr{y}^{(logrEI)}_{train}$, the latest observation that can be used for the prediction is $y^{(logrEI)}_{t_i - \tau}$ and it was assigned a state $s$ that was stored in $\mathcal{Y}^{(logrEI)}_{t_k}$ as the second element in the corresponding tuple. Since $s$ is an categorical variable with seven possible outcomes as listed in Section \ref{subsec: dc algo}, it is not sensible to just introduce it as an additional feature used in predicting. We thus use \textit{one-hot encoding} for the categorical variable $s$. For $k - \lambda - 1$ predictions, we can have a $k - \lambda - 1$ by seven matrix with each row being the one-hot encoded vector of the corresponding $s$ assigned to the target entry. We concatenate the one-hot encode matrix on the right side of $\matr{X}^{(logrEI)}_{train}$ and have a new design matrix $\matr{X}^{(SlogrEI)}$ with the one-hot encoded states. We then conduct the optimisation to find the optimal parameter $\theta$ for the given hyperparameter $\phi_0$
 \begin{equation*}
     \theta(\phi_0)_0 = \arg_{\theta(\phi_0)} \max \mathcal{E}(\widehat{\matr{y}}^{(SlogrEI)}_{train}, \matr{y}^{(logrEI)}_{train}), \; \widehat{\matr{y}}^{(SlogrEI)}_{train} = f(\theta(\phi_0); \matr{X}^{(SlogrEI)}_{train}).
 \end{equation*}
@@ -72,7 +72,7 @@ Finally, we compute the fitness score using the back-transformed prediction and 
 \begin{equation*}
     \mathcal{E} (\widehat{\matr{y}}^{(b-SlogrEI)}_{val}, \matr{y}_{val}).
 \end{equation*}
-And that concludes the whole implementation of DC Transformation in a single optimisation task in the modelling procedure.
+And that concludes the whole implementation of DC Transformation in a single model fitting.
 
 Let $\mathcal{T}^{(DC)}$ denotes the DC Transformation. $\mathcal{T}^{(DC)}$ is parameterised by the pair of threshold values $\theta$, the movement measure $\mathcal{R}$ and the interpolation method $\mathcal{I}$. As to back transformation, applying $\mathcal{T}^{(DC)}$ needs the log-differencing back transformation.
 
@@ -80,7 +80,7 @@ Let $\mathcal{T}^{(DC)}$ denotes the DC Transformation. $\mathcal{T}^{(DC)}$ is 
 In this section, we discuss the experiment we conducted to verify whether our proposed DC Transformation does have a positive effect on univariate time series forecasting. The effectiveness of a target transformation technique can be influenced by both the complementing model (the $f$ used) and the dataset. With the goal of obtaining robust and objective results, we experiment with different types of models that can be used for univariate time series forecasting and a large number of time series.
 
 \subsection{Models}\label{subsec: models}
-In this section, we cover the models we used and the hyperparameters we tuned in our experiment. The hyperparameter sapce that we searched is provided in Table \ref{tbl: hyper space}. For the discussion in the rest of this section, consider $\matr{y}$ and $\matr{X}$ an arbitrary pair of target and design matrix with $n$ rows (instances), $\phi$ as the hyperparameter set, and $\theta$ the parameter set for the model.
+In this section, we cover the models we used and the hyperparameters we tuned in our experiment. The actual hyperparameter sapce that we searched is provided in Appendix \ref{apdx: hyper space}. For the discussion in the rest of this section, consider an arbitrary training set $\mathcal{Y}_{t_k} = \{y_{t_i} \}_{i = 1, 2, \ldots, k}$ and its corresponding $\matr{y}$ and $\matr{X}$ be target and design matrix with $n$ rows (instances), $\phi$ as the hyperparameter set, and $\theta$ the parameter set for the model.
 
 \subsubsection{Elastic Net Regression Model}
 We use Elastic Net (EN) as our representative for linear regression methodologies. EN can be written as
@@ -143,24 +143,11 @@ The parameter $\theta$ is a combination of decision criteria of the decision tre
 \subsubsection{Exponential Smoothing Forecasting Model}
 Exponential Smoothing (ETS) is not a regression model, as in, it does not estimate its parameters with our target $\matr{y}$ and design matrix $\matr{X}$ environment. ETS trains directly on the univariate time series $\mathcal{Y}_{t_k} = \{ y_{t_i}\}_{i = 1, 2, \ldots, k}$. ETS has many variants. The one we used here is based on the implementation of \href{https://www.rdocumentation.org/packages/forecast/versions/8.12/topics/ets}{R Version of ETS} (see Hyndman et al. \citeyear{hyndman2008admissible} and Hyndman et al. \citeyear{hyndman2008forecasting}). This version of ETS implicitly tunes the hyperparameter $\phi = (trend, seasonal, damped)$ where
 \begin{itemize}
+    \item $seasonal \in \{ \text{additive}, \text{multiplicative} \}$ is a binary variable setting whether the seasonal component in the model is additive or multiplicative. An additive seasonal component fits better when there is not much seasonal variation, while a multiplicative seasonal component is made for the cases where seasonal variation is proportional to the level of the time series.
     \item $trend \in \{ \text{additive}, \text{multiplicative} \}$ is a binary variable setting whether the trend component in the model is additive or multiplicative.
-    \item $seasonal \in \{ \text{additive}, \text{multiplicative} \}$ is a binary variable setting whether the seasonal component in the model is additive or multiplicative.
     \item $damped \in \{ \text{True}, \text{False} \}$ is a binary variable setting whether the damped trend methods is applied. The damped trend methods dampens the trend component to a constant into the future to prevent the model from over-forecasting for future values.
 \end{itemize}
-
-\begin{center}
-    \begin{table}
-        \begin{tabular}{|c c c c|} 
-            \hline
-            Col1 & Col2 & Col2 & Col3 \\
-            \hline\hline
-            1 & 6 & 87837 & 787 \\ 
-            \hline
-        \end{tabular}
-        \caption{Table to test captions and labels.}
-        \label{tbl: hyper space}
-    \end{table}
-\end{center}
+ETS essentially uses a weighted average of the past observations as its prediction. In the sense that a weighted average is a form of linear combination, ETS is much like EN according to the way we train it. $\theta$ is a vector of weights assigned to the past observations ETS uses for its prediction.
 
 \subsubsection{Moving Average}
 

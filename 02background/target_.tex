@@ -4,7 +4,7 @@ Building on the ML regression modelling we established in the previous section, 
 \begin{enumerate}
     \item Find out the available information set $\mathcal{Y}_{t_k}$.
     \item Find out the forecasting configuration according to the objective: gap $\tau$. (In this paper, we discuss $h=1$).
-    \item Decide the modelling configuration: validation set size $v$, test set size $\kappa$, width of sliding window $\lambda$, and the fitness function $\mathcal{E}$.
+    \item Decide the modelling configuration: validation set size $v$, test set size $\kappa$, width of sliding window $\lambda$, and the validation function $\mathcal{V}$.
     \item Choose a family of the model $f$.
     \item Decide a hyperparameter space $\phi$ to search.
     \item Conduct model selection using the validation procedure \ref{alg: validation}.
@@ -15,17 +15,17 @@ Observe that aside from our appointing the model $f$ and the hyperparameter set 
 \subsection{Implementation of Target Transformation}\label{subsec: target transformation procedure}
 
 \subsubsection{Transforming the Target}
-Let $\mathcal{T}: \mathbb{R}^p \longmapsto \mathbb{R}^q$ be an arbitrary target transformation that maps a $p$ dimensional vector to a $q$ dimensional vector. Normally we have $p >= q, \; p \approx q$\footnote{If $\mathcal{T}$ reduces the dimension, this means that adopting such a target transformation reduces the data point we can use during training. For example, a five-step moving average transformation causes the loss of the first 4 datapoints. Seeing that we normally prefer as many data points as possible, such loss of data points is a cost that might come with the implementation of the technique.}. Throughout the modelling procedure, target transformation is to be embedded before and possibly after every optimisation stated in Equation \ref{eq: ml training}. Consider an arbitrary optimisation in the modelling procedure to be conducted with the information set $\mathcal{Y}_{t_k} = \{ y_{t_i} \}_{i = 1, 2, \ldots, k}$, we practice
+Let $\mathcal{T}: \mathbb{R}^p \longmapsto \mathbb{R}^q$ be an arbitrary target transformation that maps a $p$ dimensional vector to a $q$ dimensional vector. Normally we have $p >= q, \; p \approx q$\footnote{If $\mathcal{T}$ reduces the dimension, this means that adopting such a target transformation reduces the data point we can use during training. For example, a five-step moving average transformation causes the loss of the first 4 datapoints. Seeing that we normally prefer as many data points as possible, such loss of data points is a cost that might come with the implementation of the technique.}. Throughout the modelling procedure, target transformation is to be embedded before and possibly after every model fitting stated in Equation \ref{eq: ml training}. Consider an arbitrary model fitting in the modelling procedure to be conducted with the information set $\mathcal{Y}_{t_k} = \{ y_{t_i} \}_{i = 1, 2, \ldots, k}$, we practice
 \begin{equation*}
     \mathcal{Y}^{'}_{t_k} = \mathcal{T}(\mathcal{Y}_{t_k})
 \end{equation*}
-and use the transformed time series $\mathcal{Y}^{'}_{t_k}$ for the rest of the optimisation operation: we generate the training target $\matr{y}^{'}_{train}$, training design matrix $\matr{X}^{'}_{train}$ with $\mathcal{Y}^{'}_{t_k}$ through
+and use the transformed time series $\mathcal{Y}^{'}_{t_k}$ for the rest of the model fitting operation: we generate the training target $\matr{y}^{'}_{train}$, training design matrix $\matr{X}^{'}_{train}$ with $\mathcal{Y}^{'}_{t_k}$ through
 \begin{equation*}
     \matr{y}^{'}_{train}, \; \matr{X}^{'}_{train} = \mathcal{S}(\mathcal{Y}^{'}_{t_k}; \tau, h, \lambda)
 \end{equation*}
-and perform the optimisation
+and fit the model
 \begin{equation*}
-    \theta(\phi_0)_0 = \arg_{\theta(\phi_0)} \max \mathcal{E}(\widehat{\matr{y}}^{'}_{train}, \matr{y}^{'}_{train}), \; \widehat{\matr{y}}^{'}_{train} = f(\theta(\phi_0); \matr{X}^{'}_{train}).
+    \theta(\phi_0)_0 = \arg_{\theta(\phi_0)} \min \mathcal{E}(\widehat{\matr{y}}^{'}_{train}, \matr{y}^{'}_{train}), \; \widehat{\matr{y}}^{'}_{train} = f(\theta(\phi_0); \matr{X}^{'}_{train}).
 \end{equation*}
 After the optimisation using the transformed time series, we make the input used for generating a validation prediction
 \begin{equation*}
@@ -48,7 +48,7 @@ The major criterion causing the need of the back transformation is that $\mathca
 \end{equation*}
 and use this back-transformed prediction to compute the fitness score for whatever validation purposes given by
 \begin{equation*}
-    \mathcal{E}(\widehat{\matr{y}}^{b-}_{val}, \matr{y}_{val}).
+    \mathcal{V}(\widehat{\matr{y}}^{b-}_{val}, \matr{y}_{val}).
 \end{equation*}
 And that concludes the implementation of target transformation.
 
@@ -72,7 +72,7 @@ This is why log-differencing is a mathematical simulation of the net return and 
 \end{equation*}
 and perform the optimisation
 \begin{equation*}
-    \theta(\phi_0)_0 = \arg_{\theta(\phi_0)} \max \mathcal{E}(\widehat{\matr{y}}^{(logr)}_{train}, \matr{y}^{(logr)}_{train}), \; \widehat{\matr{y}}^{(logr)}_{train} = f(\theta(\phi_0); \matr{X}^{(logr)}_{train}).
+    \theta(\phi_0)_0 = \arg_{\theta(\phi_0)} \min \mathcal{E}(\widehat{\matr{y}}^{(logr)}_{train}, \matr{y}^{(logr)}_{train}), \; \widehat{\matr{y}}^{(logr)}_{train} = f(\theta(\phi_0); \matr{X}^{(logr)}_{train}).
 \end{equation*}
 We then make the input matrix
 \begin{equation*}
@@ -100,9 +100,9 @@ Then we back-transform the prediction
 \end{equation*}
 to use it for fitness computing
 \begin{equation*}
-    \mathcal{E}(\widehat{\matr{y}}^{(b-logr)}_{val}, \matr{y}_{val}).
+    \mathcal{V}(\widehat{\matr{y}}^{(b-logr)}_{val}, \matr{y}_{val}).
 \end{equation*}
-And that concludes the implementation of log-difference target transformation in a single optimisation operation. Observe that log-differencing is essentially an invertible function. However, the construction of the back transformation in Equation \ref{eq: back log-differencing} involves the use of a subset of the original training set $\mathcal{Y}_{t_{k_i}}$. This is because $\mathcal{T}^{(logr)}$ retains only the relative information among the values of the original time series\footnote{Log-differencing does not keep track of the original level of the values. We can only induce their relative change with respect to others from its output set.}. Therefore, it is not possible to reconstruct the original scale just by using $\mathcal{Y}^{(logr)}_{t_k}$. We hope this demonstration provides a vivid image of how target transformation is implemented.
+And that concludes the implementation of log-difference target transformation in a single model fitting. Observe that log-differencing is essentially an invertible function. However, the construction of the back transformation in Equation \ref{eq: back log-differencing} involves the use of a subset of the original training set $\mathcal{Y}_{t_{k_i}}$. This is because $\mathcal{T}^{(logr)}$ retains only the relative information among the values of the original time series\footnote{Log-differencing does not keep track of the original level of the values. We can only induce their relative change with respect to others from its output set.}. Therefore, it is not possible to reconstruct the original scale just by using $\mathcal{Y}^{(logr)}_{t_k}$. We hope this demonstration provides a vivid image of how target transformation is implemented.
 
 \subsection{Discussions}
 In this section, we discussion some notions concerning target transformation. Given a modelling procedure, implementing target transformation can further complex the whole process. In particular, transformations are often parameterised as they essentially are functions. Trying to find the optimal parameters for the transformation can make the training process much more expensive. Let $\omega$ be the set of parameters characterising a transformation. As $\omega$ does not belongs to $\theta$ that determinstically effects the output of $f$, $\omega$ has to be considered as a part of the hyperparameters $\phi$ just like modelling configurations such as sliding window size $\lambda$. Including $\omega$ increases the dimension of $\phi$ and further enlarge the hyperparameter space to search during model selection. This is a potential cost in terms of training efficiency when implementing target transformation.
