@@ -128,7 +128,7 @@ The hyperparameter space of $\delta$ that we denoted as $H(\delta)$ is then base
 Observe that $H(\delta)$ is a set with $11 \times 11 = 121$ two-dimensional tuples.
 
 \subsection{Models}\label{subsec: models}
-This section covers the models we used and the hyperparameters we tuned in our experiment. The actual hyperparameter space we searched is provided in Appendix \ref{apdx: hyper space}. For the discussion in the rest of this section, consider an arbitrary training set $\mathcal{Y}_{t_k} = \{y_{t_i} \}_{i = 1, 2, \ldots, k}$ and its corresponding $\matr{y}$ and $\matr{X}$ derived from $\mathcal{S}$ be target and design matrix with $n$ rows (instances), $\phi$ as the hyperparameter set, and $\theta$ the parameter set for the model.
+This section covers the models we used and the hyperparameters we tuned in our experiment. The actual hyperparameter space we searched per model is provided in Appendix \ref{apdx: hyper space}. For the discussion in the rest of this section, consider an arbitrary training set $\mathcal{Y}_{t_k} = \{y_{t_i} \}_{i = 1, 2, \ldots, k}$ and its corresponding $\matr{y}$ and $\matr{X}$ derived from $\mathcal{S}$ be target and design matrix with $n$ rows (instances), $\phi$ as the hyperparameter set, and $\theta$ the parameter set for the model.
 
 \subsubsection{Elastic Net Regression Model}
 We use Elastic Net (EN) as our representative for linear regression methodologies. EN can be written as
@@ -196,14 +196,19 @@ Exponential Smoothing (ETS) is not a regression model, as in, it does not estima
 \end{itemize}
 ETS essentially uses a weighted average of the past observations as its prediction. In the sense that a weighted average is a form of linear combination, ETS is much like EN according to how we train it. $\theta$ is a vector of weights assigned to the past observations ETS uses for its prediction.
 
-\subsubsection{Moving Average}
-A simple Moving Average (MA) model is used as a benchmark. MA is simple an average of the past observations. The number of past observations used for the averaging is parameterised by $\theta = (q)$. Note that for $q = 1$, if MA is a \textit{naive forecasting} - MA uses the latest observation as its prediction.
-
+\begin{comment}
+    \subsubsection{Moving Average}
+    A simple Moving Average (MA) model is used as a benchmark. MA is simple an average of the past observations. The number of past observations used for the averaging is parameterised by $\theta = (q)$. Note that for $q = 1$, if MA is a \textit{naive forecasting} - MA uses the latest observation as its prediction.
+\end{comment}
 \subsection{Agent}
-For each model we mentioned in the previous section, we train the model with and without applying DC Transformation on the set of time series we chose from the M4 dataset. As a result, we end up having twelve agents $\{\text{EN}, \text{MLP}, \text{LSVR}, \text{RF}, \text{ETS}, \text{MA} \} \times \{ \text{with DC Transform}, \text{without DC Transform} \}$ each being trained on many time series.
+For each model we mentioned in the previous section, we train the model with and without applying DC Transformation on the set of time series we chose from the M4 dataset. As a result, we end up having ten agents
+\begin{equation*}
+    \{\text{EN}, \text{MLP}, \text{LSVR}, \text{RF}, \text{ETS} \} \times \{ \text{with DC Transform}, \text{without DC Transform} \}
+\end{equation*}
+each being trained on many time series.
 
 \subsection{Performance Metrics}
-We consult the experiment described in Ahmed et al. (\citeyear{2010EmpiricalMLComparison}) for our performance metrics. Our main performance measure is the Symmetric Mean Absolute Percentage Error (SMAPE)\footnote{This is also the main error measure for M3 Competition (see Makridak et al. \citeyear{makridakis2000m3})}. For a single prediction $\widehat{\matr{y}}_i$ and the target $\matr{y}_i$, the Symmetric Absolute Percentage Error (SAPE) is given by
+We consult the experiment described in Ahmed et al. (\citeyear{2010EmpiricalMLComparison}) for our performance metrics. Our main performance measure is the Symmetric Mean Absolute Percentage Error (SMAPE)\footnote{This is also the main error measure for M3 Competition (see Makridak et al. \citeyear{makridakis2000m3})}. For a single prediction $\widehat{\matr{y}}_i \in \widehat{\matr{y}}$ and the target $\matr{y}_i \in \matr{y}$, the Symmetric Absolute Percentage Error (SAPE) is given by
 \begin{equation*}
     SAPE(\widehat{\matr{y}}_i, \matr{y}_i) = \frac{2| \widehat{\matr{y}}_i - \matr{y}_i|}{|\widehat{\matr{y}}_i| + |\matr{y}_i| }
 \end{equation*}
@@ -213,11 +218,11 @@ where the operator $| \cdot |$ is the norm of a vector (can be L1, L2 or others)
 \end{equation*}
 Observe that SMAPE is scale-free because it is a relative error measure. We can combine the SMAPE yielded from different time series with different scales. This is one of the main reasons we chose SMAPE as our primary error measure.
 
-We also calculate a ranking measure. For a time series, we have twelve agents trained and their corresponding SMAPE scores. We rank these twelve agents based on their SMAPE - the agent with the lowest SMAPE is ranked number one, the largest the last. For $P$ time series that all twelve agents have been trained on, an agent has $P$ ranks. Let $R_{q, p}$ denote the rank of model $q$ on time series $p$. We have a distribution of ranks for an agent $q$ and can calculate the mean given by
+We also calculate a ranking measure. Let $Q=10$ be the total number of agents. For a time series, we have $Q$ agents trained and their corresponding SMAPE scores. We rank these $Q$ agents based on their SMAPE - the agent with the lowest SMAPE is ranked number one, the largest the last. For $P$ time series that all $Q$ agents have been trained on, an agent has $P$ ranks. Let $R_{q, p}$ denote the rank of model $q$ on time series $p$. We have a distribution of ranks for an agent $q$ and can calculate the mean given by
 \begin{equation*}
     R_q = \frac{1}{P} \sum_{p = 1}^{P}R_{q, p}.
 \end{equation*}
-Moreover, treating $R_q$ as a random variable, we can come up with a confidence interval for the ranking of an agent $q$. Let $Q = 12$ be the total number of agents, and $c_{\alpha, Q}$ be the upper $\alpha$ percentile of the range for $Q$ independent standard Gaussian normal variables. Then the $\alpha$ percent confidence interval of the ranking for agent $q$ is given by
+Moreover, treating $R_q$ as a random variable, we can come up with a confidence interval for the ranking of an agent $q$. Let $c_{\alpha, Q}$ be the upper $\alpha$ percentile of the range for $Q$ independent standard Gaussian normal variables. Then the $\alpha$ percent confidence interval of the ranking for agent $q$ is given by
 \begin{equation*}
     R_q \pm 0.5 c_{\alpha, Q} \sqrt{\frac{Q(Q+1)}{12 P}}.
 \end{equation*}
@@ -230,6 +235,4 @@ Another performance measure we calculated is called the `fraction-best' measure 
 There could be occasions where an agent is conditionally performant, i.e., an agent is particularly good only under limited circumstances. In such cases, the agent can have a mediocre average SMAPE score but an impressive fraction-best score. Calculating the fraction-best score helps identify such agents if they exist.
 
 \subsection{Modelling configuration}
-In this section, we present some other configurations for our experiment. All agents apply log-differencing as their basic target transformation method during the model fitting. Log-differencing helps make the time series stationary. The validation size $v$ and test size $\kappa$ are fixed to ten percent of the length of the training set size for all time series. The forecast horizon is fixed to one, and the gap is fixed to one step for all forecasting objectives.
-
-During the model selection and evaluation of a model, the model is to be fitted $v$ times for model selection and $\kappa$ times for model evaluation. This can be quite computationally expensive when the validation or testing set is large. Therefore, there is a notion of \textit{retrain window}. The retrain window marks a window length in which the model does not get refitted again - it simply uses the new observations for predictions. Take model selection as an example; if there are a hundred validation points, the model will be fitted a hundred times to come up with a single validation score with the retrain window being zero. Say we implemented a retrain window with the size of ten. Then through the hundred validation points, the model is only refitted every ten points. That leads to approximately ten times less computational power for model selection. Our experiment has different retrain window sizes for time series with different frequencies. For hourly, daily and weekly frequencies, we have a retrain window of ten, i.e., the model updates its parameters every ten hours, days or weeks. For monthly frequency, we have a retrain window of size six; this means that the model parameters get updated every six months. Setting a retrain window is a compromisation to computational efficiency, and it does affect how the model learns. However, our experiment is to compare the models with and without DC Transformation. So as long as they have the same ground, our analyses should be sound.
+In this section, we present some other configurations for our experiment. All agents apply log-differencing as their basic target transformation method during the model fitting. Log-differencing helps make the time series stationary. The validation size $v$ and test size $\kappa$ are fixed to ten percent of the length of the training set size for all time series. The forecast horizon is fixed to one, and the gap is fixed to one step for all forecasting objectives. As to the retrain window, we have different retrain window sizes for time series with different frequencies. For hourly, daily and weekly frequencies, we have a retrain window of ten, i.e., the model updates its parameters every ten hours, days or weeks. For monthly frequency, we have a retrain window of size six; this means that the model parameters get updated every six months. Our experiment is to compare the models with and without DC Transformation. So as long as they have the same ground, our analyses shouldn't be jeopardised by the retrain window.

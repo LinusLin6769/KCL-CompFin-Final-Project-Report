@@ -1,16 +1,66 @@
 \chapter{Hyperparameter Space}\label{apdx: hyper space}
-In this chapter, we present the hyperparameter space we search for the models we trained in our experiment. Note that for tasks in different frequencies, the hyperparameter space we search are different. This is because time series with different frequencies essentially operates in different space. The forecasting tasks are thus differentiated by the frequencies as well.
+In this chapter, we present the hyperparameter space we search for the models we trained in our experiment. Note that for tasks in different frequencies, the hyperparameter space we search are different. The main difference is in the number of lags $l$. This is because time series with different frequencies essentially operates in different space. The forecasting tasks are thus differentiated by the frequencies as well.
 
 \begin{center}
-    \begin{table}
-        \begin{tabular}{|c c c c|} 
+    \begin{table}[h!]
+        \begin{tabular}{|l|l|l|} 
             \hline
-            Col1 & Col2 & Col2 & Col3 \\
+            Model & Hyperparameter space & Total Number of Policies \\
             \hline\hline
-            1 & 6 & 87837 & 787 \\ 
+            \multirow{3}{*}{EN}   & $l$: $\{6, 12, 24 \}$ & \multirow{3}{*}{$3 \times 4 \times 3 = 36$} \\
+                                  & $\alpha$: $\{0.1, 1, 10, 100\}$ & \\
+                                  & $\rho$: $\{0.1, 0.5, 0.9 \}$ & \\
+            \hline
+            \multirow{3}{*}{MLP}  & $l$: $\{6, 12, 24 \}$ & \multirow{3}{*}{$3 \times 4 \times 1 = 12$} \\
+                                  & $strucs$: $\{(12), (24), (12, 12), (24, 12)\}$ & \\
+                                  & $maxiter$: $\{ 500\}$ & \\
+            \hline
+            \multirow{3}{*}{LSVR} & $l$: $\{6, 12, 24 \}$ & \multirow{3}{*}{$3 \times 2 \times 2 = 12$} \\
+                                  & $tol$: $\{0.001, 0.01\}$ & \\
+                                  & $C$: $\{0.1, 1\}$ & \\
+            \hline
+            \multirow{2}{*}{RF}   & $l$: $\{6, 12, 24 \}$ & \multirow{2}{*}{$3 \times 2 = 6$} \\
+                                  & $min sample split$: $\{0.005, 0.01\}$ & \\
+            \hline
+            \multirow{3}{*}{ETS}  & $seasonal$: $\{\text{additive}, \text{multiplicative}\}$ & \multirow{3}{*}{$2 \times 2 \times 2 = 8$}  \\
+                                  & $trend$: $\{\text{additive}, \text{multiplicative}\}$ & \\
+                                  & $damped$: $\{\text{True}, \text{False}\}$ & \\
             \hline
         \end{tabular}
-        \caption{Table to test captions and labels.}
-        \label{tbl: hyper space}
+        \caption{ Hyperparameter space per model for hourly or monthly tasks}
+        {\raggedright Hyperparameter space for hourly and monthly tasks is the same.\par}
+        \label{tbl: hyper space hourly/monthly}
+    \end{table}
+\end{center}
+
+\begin{center}
+    \begin{table}[h!]
+        \begin{tabular}{|l|l|l|} 
+            \hline
+            Model & Hyperparameter space & Total Number of Policies \\
+            \hline\hline
+            \multirow{3}{*}{EN}   & $l$: $\{3, 7, 14 \}$ & \multirow{3}{*}{$3 \times 4 \times 3 = 36$} \\
+                                  & $\alpha$: $\{0.1, 1, 10, 100\}$ & \\
+                                  & $\rho$: $\{0.1, 0.5, 0.9 \}$ & \\
+            \hline
+            \multirow{3}{*}{MLP}  & $l$: $\{3, 7, 14 \}$ & \multirow{3}{*}{$3 \times 4 \times 1 = 12$} \\
+                                  & $strucs$: $\{(6, ), (12, ), (6, 6, ), (12, 6, )\}$ & \\
+                                  & $maxiter$: $\{ 500\}$ & \\
+            \hline
+            \multirow{3}{*}{LSVR} & $l$: $\{3, 7, 14 \}$ & \multirow{3}{*}{$3 \times 2 \times 2 = 12$} \\
+                                  & $tol$: $\{0.001, 0.01\}$ & \\
+                                  & $C$: $\{0.1, 1\}$ & \\
+            \hline
+            \multirow{2}{*}{RF}   & $l$: $\{3, 7, 14 \}$ & \multirow{2}{*}{$3 \times 2 = 6$} \\
+                                  & $min sample split$: $\{0.005, 0.01\}$ & \\
+            \hline
+            \multirow{3}{*}{ETS}  & $seasonal$: $\{\text{additive}, \text{multiplicative}\}$ & \multirow{3}{*}{$2 \times 2 \times 2 = 8$}  \\
+                                  & $trend$: $\{\text{additive}, \text{multiplicative}\}$ & \\
+                                  & $damped$: $\{\text{True}, \text{False}\}$ & \\
+            \hline
+        \end{tabular}
+        \caption{ Hyperparameter space per model for daily or weekly tasks}
+        {\raggedright Hyperparameter space for daily and weekly tasks is the same.\par}
+        \label{tbl: hyper space daily/weekly}
     \end{table}
 \end{center}
