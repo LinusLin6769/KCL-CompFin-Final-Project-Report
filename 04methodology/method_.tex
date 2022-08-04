@@ -1,5 +1,5 @@
 \chapter{Methodology}\label{ch: methodology}
-This chapter covers the technical details of our experiment and analyses. We present our proposed target transformation technique based on the DC intrinsic time framework in Section \ref{sec: dc transformation}. Then in Section \ref{sec: experiment}, we address the experiment we design to evaluate the transformation.
+This chapter covers the technical details of our experiment and analyses methodologies. We present our proposed target transformation technique Directional Change Transformation (DCT) in Section \ref{sec: dc transformation}. Then in Section \ref{sec: experiment}, we address the experiment we design to evaluate the transformation.
 
 \section{DC Target Transformation}\label{sec: dc transformation}
 Our proposed target transformation is called \textit{Directional Change (DC) Transformation}. The DC Transformation is a chain of operations to be embedded as the general target transformation procedure introduced in Section \ref{subsec: target transformation procedure}. Recall the log-difference transformation $\mathcal{T}^{(logr)}$ and DC algorithm $\mathcal{A}^{(DC)} (\cdot; \delta, \mathcal{R} (x; y))$ we addressed earlier. Then for an arbitrary model fitting to be conducted with time series $\mathcal{Y}_{t_k} = \{y_{t_i}\}_{i = 1, 2, \ldots, k}$ and its timestamp set be $t$, DC Transformation goes as the following.
@@ -8,7 +8,7 @@ We start by performing the DC classification algorithm for a given $\delta$ and 
 \begin{equation*}
     \mathcal{Y}^{(DC)}_{t_k} = \mathcal{A}^{(DC)} (\mathcal{Y}_{t_k}; \delta, \mathcal{R} (x; y)).
 \end{equation*}
-Let $\mathcal{Y}^{(E)}_{t_k}$ be a subset of $\mathcal{Y}^{(DC)}_{t_k}$ such that
+We then collect the values marked as local extrema or confimation of directional change events. Let $\mathcal{Y}^{(E)}_{t_k}$ be a subset of $\mathcal{Y}^{(DC)}_{t_k}$ such that
 \begin{equation*}
     \mathcal{Y}^{(E)}_{t_k} = \{(y_{t_i}, s) | s = \text{local extreme} \vee \text{DC confirmation} \}_{t_i \in t}
 \end{equation*}
@@ -19,7 +19,7 @@ and its timestamp set being $t^{(E)}$. With $\mathcal{Y}^{(E)}_{t_k} \subset \ma
         (y^{(I)}_{t_i}, s)    &\text{if $t_i \notin t - t^{(E)}$}
     \end{cases}, \; \forall i \in \{1, 2, \cdots, k\}
 \end{equation*}
-with $y^{(I)}_{t_i}$ being the interpolated values according to interpolation $\mathcal{I}$. Let $y^{(EI)}_{t_i}$ denotes the values carried by the instances in $\mathcal{Y}^{(EI)}_{t_k}$ for all $i \in \{ 1, 2, \cdots, k\}$. After the interpolation, $\langle \mathcal{Y}^{(EI)}_{t_k} \rangle = \langle \mathcal{Y}_{t_k} \rangle$.
+with $y^{(I)}_{t_i}$ being the interpolated values according to interpolation $\mathcal{I}$. Let $y^{(EI)}_{t_i}$ denotes the values carried by the instances in $\mathcal{Y}^{(EI)}_{t_k}$ for all $i \in \{ 1, 2, \cdots, k\}$. After the interpolation, $\langle \mathcal{Y}^{(EI)}_{t_k} \rangle = \langle \mathcal{Y}_{t_k} \rangle$\footnote{Recall that we let $\langle \cdot \rangle$ be a counting operator of the number of elements in a finite set.}.
 We then perform log-difference target transformation to the $y^{(EI)}_{t_i}$ values as introduced in Section \ref{subsec: log-diff transformation} and have
 \begin{equation*}
     \mathcal{Y}^{(logrEI)}_{t_k} = \mathcal{T}^{(logr)}(\mathcal{Y}^{(EI)}_{t_k}) = \begin{cases}
@@ -74,58 +74,74 @@ Finally, we compute the validation score using the back-transformed prediction a
 \end{equation*}
 And that concludes the whole implementation of DC Transformation in a single model fitting.
 
-Let $\mathcal{T}^{(DC)}$ denotes the DC Transformation. $\mathcal{T}^{(DC)}$ is parameterised by the pair of threshold values $\theta$, the movement measure $\mathcal{R}$ and the interpolation method $\mathcal{I}$. As to back transformation, applying $\mathcal{T}^{(DC)}$ needs the log-differencing back transformation.
+Let $\mathcal{T}^{(DC)}$ denotes the DC Transformation. $\mathcal{T}^{(DC)}$ is parameterised by the pair of threshold values $\theta$, the movement measure $\mathcal{R}$ and the interpolation method $\mathcal{I}$. As to back transformation, applying $\mathcal{T}^{(DC)}$ needs the log-differencing back transformation. In practice, all $\theta, \mathcal{R}$ and $\mathcal{I}$ can be explored during model selection.
 
 \section{Experiment}\label{sec: experiment}
-In this section, we discuss the experiment we conducted to verify whether our proposed DC Transformation positively affects univariate time series forecasting. The effectiveness of a target transformation technique can be influenced by both the complementing model (the $f$ used) and the dataset. To obtain robust and objective results, we experiment with different types of models that can be used for univariate time series forecasting and a large number of time series. In particular, we trained six models with and without DC Transformation over many time series and compared whether a model with DC Transformation performs better than the one without on average.
+In this section, we discuss the experiment we conducted to verify whether our proposed DC Transformation can positively affect univariate time series forecasting. The effectiveness of a target transformation technique can be influenced by both the complementing model (the choice of $f$) and the dataset. To obtain robust and objective results, we experiment with different types of models that can be used for univariate time series forecasting and a large number of time series. In particular, we trained five models with and without DC Transformation over many time series and compared model performance.
 
 \subsection{Dataset}
-Our experiment's dataset is the one used in the M4 Competition (see Makridakis et al. \citeyear{MAKRIDAKIS202054}). It consists of one hundred thousand univariate time series with different frequencies and domains (see Table \ref{tbl: m4 dataset}). Although we intend to scale the experiment to have robust results, we cannot experiment on all the time series given our limited time. Therefore, we picked a subset of time series to experiment with - \textbf{TO BE CONTINUE ...}.
+Our experiment's dataset is the one used in the M4 Competition (see Makridakis et al. \citeyear{MAKRIDAKIS202054}). It consists of one hundred thousand univariate time series with different frequencies and domains (see Table \ref{tbl: m4 dataset}). Although we intend to scale the experiment to have robust results, we cannot experiment on all the time series given our limited time. Therefore, we picked a subset of time series to experiment with. Our intention is to experiment on both higher frequency and financial/economic time series. We tested on a total of $458$ time series from the M4 dataset: $66$ of them are weekly financial time series, $252$ of them are daily time series from three different domain, and $140$ of them are hourly time series from unknown domain (see Table \ref{tbl: ts used}). The time series in M4 dataset are indexed from $1$ to $100000$. We chose the ones wed use by their length: the daily and hourly time series chosen are the first in their domain with length between $1000$ and $1500$; and the weekly financial time series chosen are the first to have length between $600$ and $1500$.  \textbf{TO BE CONTINUE ...}.
+
 \begin{center}
     \begin{table}
-        \begin{tabular}{|c || c c c c c || c || c|} 
+        \resizebox{\columnwidth}{!}{\begin{tabular}{| l || c c c c c c | r |} 
             \hline
-            Frequency & Micro & Industry & Macro & Finance & Demographic & Other & Total \\
+            {}        & Micro & Industry & Macro & Finance & Demographic & Other & Total \\
             \hline\hline
             Yearly    & 6538 & 3716 & 3903 & 6519 & 1088 & 1236 & 23000 \\
-            \hline
             Quarterly & 6020 & 4637 & 5315 & 5305 & 1858 & 865  & 24000 \\
-            \hline
             Monthly   &10975 &10017 &10016 &10987 & 5728 & 277  & 48000 \\
-            \hline
             Weekly    & 112  & 6    & 41   & 164  & 24   & 12   & 359   \\
-            \hline
             Daily     & 1476 & 422  & 127  & 1559 & 10   & 633  & 4227  \\
-            \hline
             Hourly    & 0    & 0    & 0    & 0    & 0    & 414  & 414   \\
-            \hline\hline
+            \hline
             Total     &25121 &18798 &19402 &24534 & 8708 & 3437 & 100000 \\
             \hline
-        \end{tabular}
+        \end{tabular}}
         \caption{Number of series in the M4 dataset per frequency and domain.}
-        {\raggedright This table is a direct reference to the one in Makridakis et al. (\citeyear{MAKRIDAKIS202054}).  \par}
+        {\raggedright \footnotesize This table is a direct reference to the one in Makridakis et al. (\citeyear{MAKRIDAKIS202054}). \par}
         \label{tbl: m4 dataset}
     \end{table}
 \end{center}
 
-\subsection{DC Transformation}
+\begin{center}
+    \begin{table}
+        \centering
+        \resizebox{0.7\columnwidth}{!}{\begin{tabular}{| l || c c c c | r |} 
+            \hline
+            {}        & Micro & Macro & Finance & Other & Total \\
+            \hline\hline
+            Weekly    & -     & -     & 66      & -     & 66  \\
+            Daily     & 98    & 54    & 100     & -     & 252 \\
+            Hourly    & -     & -     & -       & 140   & 140 \\
+            \hline
+            Total     & 98    & 60    & 166     & 140   & 458 \\
+            \hline
+        \end{tabular}}
+        \caption{Number of series used per frequency and domain.}
+        {\raggedright \footnotesize This table is a describes a subset of what is described in Table \ref{tbl: m4 dataset}. \par}
+        \label{tbl: ts used}
+    \end{table}
+\end{center}
+
+\subsection{DC Transformation Settings}
 Recall that DC Transformation is characterised by some parameters. For the movement measure $\mathcal{R} (x; y)$, we used the net return given by
 \begin{equation*}
     \mathcal{R} (x; y) = \frac{x - y}{y}.
 \end{equation*}
 As to the interpolation method $\mathcal{I} (S_1, S_2)$ for two sets $S_1 \subset S_2$, we used a simple linear interpolation - the values in $S_1$ are connected with a straight line such that $\langle S_1 \rangle = \langle S_2 \rangle$. We did try other interpolation methods during exploratory trials. We will mention this in Chapter \ref{ch: results and eval}.
 
-Regarding the most important parameter $\delta = (\delta_{down}, \delta_{up})$, we include this parameter into the hyperparameter set $\phi$ that has to be tuned. Since $\delta$ is correlated to the diffusion of the time series if considered as a stochastic process (see Appendix A in Petrov et al. (\citeyear{petrov2018agent})), the hyperparameter space is decided according to our simple estimation of the diffusion of the training time series if considered as a stochastic process. Let $\mathcal{Y}_{t_k}$ be an arbitrary training set, $\mathcal{T}^{(logr)}$ be the log-differencing operator described as Equation \ref{eq: log-differencing} in Section \ref{subsec: log-diff transformation} and $\text{Var}(\cdot)$ be the variance for a one-dimensional series, then our estimation of the diffusion $\sigma$ is given by
+Regarding the most important parameter $\delta = (\delta_{down}, \delta_{up})$, we include this parameter into the hyperparameter set $\phi$ that has to be tuned. Since $\delta$ is correlated to the diffusion of the time series if considered as a stochastic process (see Appendix A in Petrov et al. (\citeyear{petrov2018agent})), the hyperparameter space is decided according to our simple estimation of the diffusion of the training time series if considered as a stochastic process. Let $\mathcal{Y}_{t_k}$ be an arbitrary training set, $\mathcal{T}^{(logr)}$ be the log-differencing operator described as Equation \ref{eq: log-differencing} in Section \ref{subsec: log-diff transformation} and $\text{Var}(\cdot)$ be the variance for a one-dimensional series excluding the empty values if there is any, then our estimation of the diffusion $\sigma$ is given by
 \begin{align*}
     &\mathcal{Y}^{(logr)}_{t_k} = \mathcal{T}^{(logr)}(\mathcal{Y}_{t_k}) \\
     &\sigma = \sqrt{\text{Var}(\mathcal{Y}^{(logr)}_{t_k})}.
 \end{align*}
-The hyperparameter space of $\delta$ that we denoted as $H(\delta)$ is then based on the directional proportion of $\sigma$ and is given by\footnote{The operator `$\times$' between two finite sets is a cartesian product that gives all possible combinations of the elements in the two finite sets. For example, $\{a, b \} \times \{ 1, 2 \} = \{ (a, 1), (a, 2), (b, 1), (b, 2) \}$.}
+The hyperparameter space of $\delta$ that we denoted as $H(\delta)$ is then based on the direct proportion of $\sigma$ and is given by\footnote{The operator `$\times$' between two finite sets is a cartesian product that gives all possible combinations of the elements in the two finite sets. For example, $\{a, b \} \times \{ 1, 2 \} = \{ (a, 1), (a, 2), (b, 1), (b, 2) \}$.}
 \begin{gather*}
     A = \{ 0.01 \sigma, 0.21 \sigma, 0.41 \sigma, 0.61 \sigma, 0.81 \sigma, 1.01 \sigma, 1.21 \sigma, 1.41 \sigma, 1.61 \sigma, 1.81 \sigma, 2.01 \sigma \} \\
     H(\delta) = A \times A.
 \end{gather*}
-Observe that $H(\delta)$ is a set with $11 \times 11 = 121$ two-dimensional tuples.
+Observe that $H(\delta)$ is a set with $11 \times 11 = 121$ two-dimensional tuples. The first element in a tuple is the number for $\delta_{down}$ and the second for $\delta_{up}$.
 
 \subsection{Models}\label{subsec: models}
 This section covers the models we used and the hyperparameters we tuned in our experiment. The actual hyperparameter space we searched per model is provided in Appendix \ref{apdx: hyper space}. For the discussion in the rest of this section, consider an arbitrary training set $\mathcal{Y}_{t_k} = \{y_{t_i} \}_{i = 1, 2, \ldots, k}$ and its corresponding $\matr{y}$ and $\matr{X}$ derived from $\mathcal{S}$ be target and design matrix with $n$ rows (instances), $\phi$ as the hyperparameter set, and $\theta$ the parameter set for the model.
@@ -207,7 +223,7 @@ For each model we mentioned in the previous section, we train the model with and
 \end{equation*}
 each being trained on many time series.
 
-\subsection{Performance Metrics}
+\subsection{Performance Metrics}\label{subsec: performance metrics}
 We consult the experiment described in Ahmed et al. (\citeyear{2010EmpiricalMLComparison}) for our performance metrics. Our main performance measure is the Symmetric Mean Absolute Percentage Error (SMAPE)\footnote{This is also the main error measure for M3 Competition (see Makridak et al. \citeyear{makridakis2000m3})}. For a single prediction $\widehat{\matr{y}}_i \in \widehat{\matr{y}}$ and the target $\matr{y}_i \in \matr{y}$, the Symmetric Absolute Percentage Error (SAPE) is given by
 \begin{equation*}
     SAPE(\widehat{\matr{y}}_i, \matr{y}_i) = \frac{2| \widehat{\matr{y}}_i - \matr{y}_i|}{|\widehat{\matr{y}}_i| + |\matr{y}_i| }
@@ -218,7 +234,7 @@ where the operator $| \cdot |$ is the norm of a vector (can be L1, L2 or others)
 \end{equation*}
 Observe that SMAPE is scale-free because it is a relative error measure. We can combine the SMAPE yielded from different time series with different scales. This is one of the main reasons we chose SMAPE as our primary error measure.
 
-We also calculate a ranking measure. Let $Q=10$ be the total number of agents. For a time series, we have $Q$ agents trained and their corresponding SMAPE scores. We rank these $Q$ agents based on their SMAPE - the agent with the lowest SMAPE is ranked number one, the largest the last. For $P$ time series that all $Q$ agents have been trained on, an agent has $P$ ranks. Let $R_{q, p}$ denote the rank of model $q$ on time series $p$. We have a distribution of ranks for an agent $q$ and can calculate the mean given by
+We also calculate a ranking measure as a summary statistics. Let $Q=10$ be the total number of agents. For a time series, we have $Q$ agents trained and their corresponding SMAPE scores. We rank these $Q$ agents based on their SMAPE - the agent with the lowest SMAPE is ranked number one, the largest the last. For $P$ time series that all $Q$ agents have been trained on, an agent has $P$ ranks. Let $R_{q, p}$ denote the rank of model $q$ on time series $p$. We have a distribution of ranks for an agent $q$ and can calculate the mean given by
 \begin{equation*}
     R_q = \frac{1}{P} \sum_{p = 1}^{P}R_{q, p}.
 \end{equation*}
@@ -228,11 +244,11 @@ Moreover, treating $R_q$ as a random variable, we can come up with a confidence 
 \end{equation*}
 See Koning et al. (\citeyear{KONING2005397}) for further details of such statistics.
 
-Another performance measure we calculated is called the `fraction-best' measure (see Section Five in Ahmed et al. (\citeyear{2010EmpiricalMLComparison})). The fraction-best is also a rank-based measure. It measures how often an agent ranks top-performing out of all $P$ time series tested. For example, if agent $q$ had been ranked number one for $n$ times out of $P$ time series, the fraction-best for agent $q$ is given by
+Another summary performance measure we calculated is called the `fraction-best' measure (see Section Five in Ahmed et al. (\citeyear{2010EmpiricalMLComparison})). The fraction-best is also a rank-based measure. It measures how often an agent ranks top-performing out of all $P$ time series tested. For example, if agent $q$ had been ranked number one for $n$ times out of $P$ time series, the fraction-best for agent $q$ is given by
 \begin{equation*}
     FB_q = \frac{n}{P}.
 \end{equation*}
 There could be occasions where an agent is conditionally performant, i.e., an agent is particularly good only under limited circumstances. In such cases, the agent can have a mediocre average SMAPE score but an impressive fraction-best score. Calculating the fraction-best score helps identify such agents if they exist.
 
 \subsection{Modelling configuration}
-In this section, we present some other configurations for our experiment. All agents apply log-differencing as their basic target transformation method during the model fitting. Log-differencing helps make the time series stationary. The validation size $v$ and test size $\kappa$ are fixed to ten percent of the length of the training set size for all time series. The forecast horizon is fixed to one, and the gap is fixed to one step for all forecasting objectives. As to the retrain window, we have different retrain window sizes for time series with different frequencies. For hourly, daily and weekly frequencies, we have a retrain window of ten, i.e., the model updates its parameters every ten hours, days or weeks. For monthly frequency, we have a retrain window of size six; this means that the model parameters get updated every six months. Our experiment is to compare the models with and without DC Transformation. So as long as they have the same ground, our analyses shouldn't be jeopardised by the retrain window.
+In this section, we present some other configurations for our experiment. All agents use log-differencing as their basic target transformation method during the model fitting. Log-differencing helps make the time series stationary. The validation size $v$ and test size $\kappa$ are fixed to ten percent of the length of the training set size for all time series. We treat the time series as time homogeneous, i.e., the values in a time series are indexed by the nature number set sequentially. The forecast horizon is fixed to one, and the gap is fixed to one step for all forecasting objectives. As to the retrain window, we have different retrain window sizes for time series with different frequencies. For hourly, daily and weekly frequencies, we have a retrain window of ten, i.e., the model updates its parameters every ten steps. For monthly frequency, we have a retrain window of size six; this means that the model parameters get updated every six steps. Although setting a retrain windwo may worsen model performance, our experiment is to compare the models with and without DC Transformation. So as long as they have the same ground, our analyses shouldn't be jeopardised by the retrain window.
