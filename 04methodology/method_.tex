@@ -75,7 +75,7 @@ Finally, we compute the validation score using the back-transformed prediction a
 \begin{equation*}
     \mathcal{V} (\widehat{\matr{y}}^{(b-SlogrEI)}_{val}, \matr{y}_{val}).
 \end{equation*}
-And that concludes the whole implementation of DC Transformation in a single model fitting.
+And that concludes the whole implementation of DC Transformation in a single model fitting. As the stated standard modelling procedure, such fitting process is repeated in the validation operation to compute the validation score for a single model setting (hyperparameter). We perform validation for all the hyperparameters and choose the one with the best validation score.
 
 Let $\mathcal{T}^{(DC)}$ denotes the DC Transformation. $\mathcal{T}^{(DC)}$ is parameterised by the pair of threshold values $\theta$, the movement measure $\mathcal{R}$ and the interpolation method $\mathcal{I}$. As to back transformation, applying $\mathcal{T}^{(DC)}$ needs the log-differencing back transformation. In practice, all $\theta, \mathcal{R}$ and $\mathcal{I}$ can be explored during model selection.
 
