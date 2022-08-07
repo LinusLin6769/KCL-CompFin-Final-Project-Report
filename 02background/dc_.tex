@@ -3,7 +3,7 @@
 In this section, we dive into the technical details of the Directional Change (DC) Intrinsic Time Framework. To elaborate on the naming, `Directional Change' describes the \textit{Directional Change Events} identified from a given time series by an algorithm and `Intrinsic Time' is one of the key characteristics of the DC events. We start by addressing such an algorithm in Section \ref{subsec: dc algo}, and we discuss the framework and its intrinsic time ideology in Section \ref{subsec: dc discussion}.
 
 \subsection{The Algorithm for Directional Change Events}\label{subsec: dc algo}
-The algorithm in the DC framework operates much like a state machine. Given a univariate time series, it classifies every entry in the time series into \textit{states}. The algorithm's output is thus the same time series but with a state assigned to each entry by the algorithm. The primary goal of such an algorithm is to provide information on directional change events. However, the assignment of states is also the source of many other interesting analyses and implementations carried out under the DC framework. Let an arbitrary time series be $\mathcal{Y}_{t_k} = \{y_{t_i} \}_{i = 1, 2, \ldots, k}$. Then the algorithm $\mathcal{A}^{(DC)}$ can be noted as
+The algorithm in the DC framework operates much like a state machine. Given a univariate time series, it classifies every entry in the time series into \textit{states}. The algorithm's output is thus the same time series but with a state assigned to each entry by the algorithm. The primary goal of such an algorithm is to provide information on directional change events. Moreover, the assignment of states is also the source of many other interesting analyses and implementations carried out under the DC framework. Let an arbitrary time series be $\mathcal{Y}_{t_k} = \{y_{t_i} \}_{i = 1, 2, \ldots, k}$. Then the algorithm $\mathcal{A}^{(DC)}$ can be noted as
 \begin{equation*}
     \mathcal{Y}_{t_k}^{(DC)} = \mathcal{A}^{(DC)} (\mathcal{Y}_{t_k} ; \delta, \mathcal{R} (x; y)) = \{ (y_{t_i}, s)\}_{i = 1, 2, \ldots, k}, \; s \in S
 \end{equation*}
@@ -27,7 +27,7 @@ In order to mark the events, set $S$ consists of seven possible states that coul
     \item[4.,5.] Bullish or Bearish Overshoot: Upon identifying a bullish or bearish trend, the price is at a bullish or bearish overshoot before it reaches a local extreme (or, say, the next trend with the opposite direction).
     \item[6.,7.] Bullish or Bearish DC Confirmation: This value confirms the occurrence and ends a bullish or bearish trend. Note that the end of a bullish or bearish trend is also the end of a DC event and the start of the next one. This is identified by the value that has risen or decreased more than $\delta_{up}$ or $\delta_{down}$ compared to the previously spotted local extreme.
 \end{enumerate}
-Figure \ref{fig: dc} is an figure we found in Petrov et al. (\citeyear{petrov2018agent}) the illustrates the Directional Change Framework.
+Figure \ref{fig: dc} is a figure we found in Petrov et al. (\citeyear{petrov2018agent}) that illustrates the Directional Change Framework.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\columnwidth]{dc}
@@ -46,7 +46,7 @@ See Algorithm \ref{alg: dc} for the detailed pseudocode of $\mathcal{A}^{(DC)} (
     \State{Initialise local extreme $e$ to $none$}
     \For{$y_{t_i} \in \{y_{t_1}, y_{t_2}, \cdots, y_{t_k} \} $}
         \If{$i$ is $1$}
-            \State{Update local extreme $e$ to $y_{t_i}$ and move on to next iteration.}
+            \State{Update local extreme $e$ to $y_{t_i}$ and move on to the next iteration.}
         \EndIf
         \If{Current mode is $none$}
             \State{$r \leftarrow \mathcal{R}(y_{t_i}; e)$}
@@ -89,7 +89,7 @@ See Algorithm \ref{alg: dc} for the detailed pseudocode of $\mathcal{A}^{(DC)} (
 \subsection{Discussions}\label{subsec: dc discussion}
 A directional change event is a downturn or upturn event which is a combination of an overshoot and its consecutive trend\footnote{An overshoot and its consecutive trend have opposite directions.}, and the identification of DC events is the primary goal of the $\mathcal{A}^{(DC)}$ algorithm. Here are some remarks concerning the algorithm and its output.
 \begin{enumerate}
-    \item Observe that a DC event is considered complete only when the time series has moved passed the threshold set by $\delta = (\delta_{down}, \delta_{up})$ according to measure $\mathcal{R}$. Therefore, lower $\delta$ values lead to fewer total DC events identified by the algorithm and vice versa.
+    \item Observe that a DC event is considered complete only when the time series has moved passed the threshold set by $\delta = (\delta_{down}, \delta_{up})$ according to measure $\mathcal{R}$. Therefore, higher $\delta$ values lead to fewer total DC events identified by the algorithm and vice versa.
     \item Due to how $\mathcal{A}^{(DC)}$ is parameterised by $\delta$, the number of DC events is negatively correlated to the volatility of $\mathcal{Y}_{t_k}$.
     \item In the event where $\delta_{down} \neq \delta_{up}$, the algorithm is set to have different sensitivity to bullish and bearish trends.
     \item $\mathcal{A}^{(DC)}$ is a deterministic mapping if $\mathcal{Y}_{t_k}$, $\delta$ and $\mathcal{R}$ are given.
@@ -98,5 +98,5 @@ A directional change event is a downturn or upturn event which is a combination 
     \begin{equation*}
         \mathcal{Y}^{(IT)}_{t_k} = \{ (y_{t_i}, s) | s = \text{DC Confirmation} \}_{i = 1, 2, \ldots, k}.
     \end{equation*}
-    Then the timestamp set of $\mathcal{Y}^{(IT)}_{t_k}$, which we denote as $t^{(IT)}$, marks the time points where directional change events are confirmed. $t^{(IT)}$ is called the \textit{Directional Change Event-based Intrinsic Time} of $\mathcal{Y}_{t_k}$ based on $\delta$ and $\mathcal{R}$. $t^{(e)}$ 
+    Then the timestamp set of $\mathcal{Y}^{(IT)}_{t_k}$, which we denote as $t^{(IT)}$, marks the time points where directional change events are confirmed. $t^{(IT)}$ is called the \textit{Directional Change Event-based Intrinsic Time} of $\mathcal{Y}_{t_k}$ based on $\delta$ and $\mathcal{R}$.
 \end{enumerate}

@@ -2,7 +2,7 @@
 In this chapter, we present our experimental results and their corresponding evaluation. Our experiment was built to evaluate whether DC Transformation helps improve model performance in univariate time series forecasting. Our experiment covers weekly, daily, and hourly frequencies and the results are investigated separately based on the performance metrics we addressed in Section \ref{subsec: performance metrics}. For a model `M', agents using model `M' without DC Transformation are named `M\_raw' and agents using model `M' with DC Transformation are named `M\_tran'.
 
 \section{Analysing Weekly Time Series}
-We start by looking at the weekly financial time series and the summary statistics of the agents. Figure \ref{fig: weekly smape box} shows that the agents have about the same level of overall performance across the time series tested. In addition, agents with and without DC Transformation do not generate different ranges of errors in general.
+We start by looking at the weekly financial time series and the summary statistics of the agents. Figure \ref{fig: weekly smape box} shows that the agents have about the same level of overall performance across the time series tested. Agents with and without DC Transformation do not generate different ranges of errors in general.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\columnwidth]{weekly_smape_box}
@@ -10,7 +10,7 @@ We start by looking at the weekly financial time series and the summary statisti
     {\raggedright \footnotesize The dataset used for this graph consists of $66$ weekly financial time series. The boxplots are distributions of SMAPEs (described in Equation \ref{eq: smape}) across $66$ time series per agent. The diamonds are the mean of the corresponding distribution. Agents with the same model are coloured the same. \par}
     \label{fig: weekly smape box}
 \end{figure}
-Figure \ref{fig: weekly rank interval} shows each agent's 90\% rank interval as presented in Equation \ref{eq: rank interval}. Such statistics has the nature of distinguishing the agents even more because the ranks do not overlap regardless of how close the agents' actual errors are. We can see that linear models like elastic net and exponential smoothing are on the same level of performance with and without DCT compared to the other models.
+Figure \ref{fig: weekly rank interval} shows each agent's 90\% rank interval as presented in Equation \ref{eq: rank interval}. Such statistics has the nature of distinguishing the agents even more because the ranks do not overlap regardless of how close the agents' actual errors are. We can see that linear models like Elastic Net and Exponential Smoothing are on the same level of performance with and without DCT compared to the other models.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\columnwidth]{weekly_rank_interval}
@@ -45,11 +45,11 @@ Table \ref{tbl: weekly stats} contains the summary statistics across all agents.
     \label{tbl: weekly stats}
 \end{table}
 
-As part of the modelling procedure, target transformation techniques are policies the modeller might consider applying depending on the situation, e.g., the dataset, modelling objective, model constraints and assumptions. It would be too ambitious to harbour the intention of seeing a target transformation technique improve performance for all models and datasets combinations. The overall statistics we showed is a sanity check about whether using DCT risks worsening model performance in general, and the statistics showed it does not. We then examine how often DCT works in favour of model performance and when it happens. For a model M and $66$ time series, we can compute the $66$ SMAPE reductions caused by DCT. Let $SMAPE_{\text{M\_raw}, i}$ and $SMAPE_{\text{M\_tran}, i}$ be the SMAPE for an agent using model M without DCT on time series number $i \in \{1, 2, \cdots, 66\}$ and that with DCT on the same time series $i$. Then the SMAPE reduction caused by DCT for model M on time series $i$ is given by
+As part of the modelling procedure, target transformation techniques are policies the modeller might consider applying depending on the situation, e.g., the dataset, modelling objective, model constraints and assumptions. It would be too ambitious to harbour the intention of seeing a target transformation technique improve performance for all combinations of model and dataset. The overall statistics we showed is a sanity check about whether using DCT risks worsening model performance in general, and the statistics showed it does not. We then examine how often DCT works in favour of model performance and when it happens. For a model M and $66$ time series, we can compute the $66$ SMAPE reductions caused by DCT. Let $SMAPE_{\text{M\_raw}, i}$ and $SMAPE_{\text{M\_tran}, i}$ be the SMAPE for an agent using model M without DCT on time series number $i \in \{1, 2, \cdots, 66\}$ and that with DCT on the same time series $i$. Then the SMAPE reduction caused by DCT for model M on time series $i$ is given by
 \begin{equation*}
     \frac{SMAPE_{\text{M\_raw}, i} - SMAPE_{\text{M\_tran}, i}}{SMAPE_{\text{M\_raw}, i}} \times 100 \%.
 \end{equation*}
-The first and second columns in Table \ref{tbl: weekly smape reduction} contain the mean and standard deviation of SMAPE reductions over $66$ time series per model. Note that positive reduction means DCT works in the model's favour while negative reduction means it is better not to apply DCT. The third column in Table \ref{tbl: weekly smape reduction} shows the proportion of SMAPE reduction being positive over $66$ time series. And the fourth and fifth columns contain the mean and standard deviation of the positive SMAPE reductions per model. We can see that although EN and ETS have a higher positive SMAPE reduction ratio, their reduction is not significant. And this is not surprising from what we saw in the previous summary statistics. On the other hand, LSVR, MLP and RF have about a ten percent positive SMAPE reduction ratio, while the average reduction in these cases is all over ten percent ($11.03\%$ for LSVR, $10.03\%$ for MLP and $16.64\%$ for RF). This is to say that there is about a ten percent chance that a modeller should consider using DCT because it reduces SMAPE by at least ten percent on average (see Figure \ref{fig: weekly positive smape reduce box} for the distribution of positive SMAPE reductions per model).
+The first and second columns in Table \ref{tbl: weekly smape reduction} contain the mean and standard deviation of SMAPE reductions over $66$ time series per model. Note that positive reduction means DCT works in the model's favour while negative reduction means it is better not to apply DCT. The third column in Table \ref{tbl: weekly smape reduction} shows the proportion of SMAPE reduction being positive over $66$ time series. We refer to this as the positive SMAPE reduction ratio. This number signifies how often should DCT be chosen in our dataset. And the fourth and fifth columns contain the mean and standard deviation of the positive SMAPE reductions per model. These show the effectiveness in reducing SMAPE when DCT is chosen. We can see that although EN and ETS have a higher positive SMAPE reduction ratio (19.7\% for EN and 24.24\% for ETS), their reduction is not significant. And this is not surprising from what we saw in the previous summary statistics that EN and ETS do not really get affected by DCT in this dataset. On the other hand, LSVR, MLP and RF have about a ten percent positive SMAPE reduction ratio, while the average reduction in these cases is all over ten percent ($11.03\%$ for LSVR, $10.03\%$ for MLP and $16.64\%$ for RF). This is to say that there is about a ten percent chance that a modeller should consider using DCT in this dataset because it reduces SMAPE by at least ten percent on average (see Figure \ref{fig: weekly positive smape reduce box} for the distribution of positive SMAPE reductions per model).
 \begin{table}[H]
     \resizebox{\columnwidth}{!}{\begin{tabular}{|l|r r r r r|}
         \hline
@@ -147,7 +147,7 @@ As to the daily results in Microeconomics, Macroeconomics and Finance, Figure \r
     \label{tbl: daily stats}
 \end{table}
 
-Moving on to SMAPE reduction caused by DCT per time series, Table \ref{tbl: daily smape reduction} has the statistics for each model. We can see the continuation of linear models having a high positive reduction ratio but insignificant reduction. On the other hand, MLP with DCT generates less error $11.51\%$ of the time. Moreover, the mean of these positive reductions is $11.25\%$. This indicates that non-linear models can better process the information provided by DC Transformation. Figure \ref{fig: daily positive smape reduce box} has the distributions of positive SMAPE reductions per model.
+Moving on to SMAPE reduction caused by DCT per time series, Table \ref{tbl: daily smape reduction} has the statistics for each model. We can see the continuation of linear models having a high positive reduction ratio in column three but insignificant reduction in column four. On the other hand, MLP with DCT generates less error $11.51\%$ of the time. Moreover, the mean of these positive reductions is $11.25\%$. This indicates that non-linear models can better process the information provided by DC Transformation on this test. Figure \ref{fig: daily positive smape reduce box} has the distributions of positive SMAPE reductions per model.
 \begin{table}[H]
     \resizebox{\columnwidth}{!}{\begin{tabular}{|l|r r r r r|}
         \hline
@@ -171,7 +171,7 @@ Moving on to SMAPE reduction caused by DCT per time series, Table \ref{tbl: dail
     {\raggedright \footnotesize The dataset used for this graph consists of $252$ daily time series in micro, macro and financial domain. The boxplots are the distributions of positive SMAPE reductions (in percentage) using DC Transformation for each model. The diamonds are the mean of the corresponding distribution. The number next to the x-labels is the ratio of DCT giving positive SMAPE reductions out of $252$ time series tested.\par}
     \label{fig: daily positive smape reduce box}
 \end{figure}
-To look into how the models are doing, Figure \ref{fig: daily 35 ts} is a daily macro time series numbered 35 in the M4 dataset and Figure \ref{fig: daily 35 ets} has the predictions generated by ETS in the test set. SMAPE reduction caused by DCT in this figure is $29.8947\%$. We can observe similar characteristics from what we saw in the weekly time series that agents with DCT can react faster and more accurate to a clear trend.
+To look into how the models are doing, Figure \ref{fig: daily 35 ts} is a daily macro time series numbered 35 in the M4 dataset and Figure \ref{fig: daily 35 ets} has the predictions generated by ETS in the test set. SMAPE reduction caused by DCT in this figure is $29.8947\%$. We can observe similar characteristics from what we saw in the weekly time series that agents with DCT can react faster and more accurate to a clear trend given the existence of drastic shocks in previous observations.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\columnwidth]{daily_35_ts}
@@ -209,7 +209,7 @@ We then analyse experimental results concerning 140 hourly time series in which 
     \centering
     \includegraphics[width=\columnwidth]{hourly_smape_box}
     \caption{Distribution of SMAPE across $140$ hourly time series per agent}
-    {\raggedright \footnotesize The dataset used for this graph consists of $140$ hourly time series in an unknown domain. The boxplots are distributions of SMAPEs (described in Equation \ref{eq: smape}) across $140$ time series per agent. The diamonds are the mean of the corresponding distribution. Agents with the same model are coloured the same. \par}
+    {\raggedright \footnotesize The dataset used for this graph consists of $140$ hourly time series in unknown domains. The boxplots are distributions of SMAPEs (described in Equation \ref{eq: smape}) across $140$ time series per agent. The diamonds are the mean of the corresponding distribution. Agents with the same model are coloured the same. \par}
     \label{fig: hourly smape box}
 \end{figure}
 \begin{figure}[H]
@@ -258,7 +258,7 @@ Table \ref{tbl: hourly smape reduction} contains the statistics about SMAPE redu
         RF   &         -548.46 &          161.49 &               0.00 &               NaN &               NaN \\
         \hline
     \end{tabular}}
-    \caption{Statistics of SMAPE reduction (\%) using DCT (hourly unknown domain)}
+    \caption{Statistics of SMAPE reduction (\%) using DCT (hourly unknown)}
     {\raggedright \footnotesize This table shows the statistics of SMAPE reduction (in percentage) using DC Transformation. The dataset consists of $140$ hourly time series in an unknown domain. The first two columns are the mean and standard deviation of SMAPE reduction for all $140$ time series. The third column is the ratio of SMAPE reduction being positive out of $140$ time series. The fourth and fifth columns are the mean and standard deviation of positive SMAPE reductions. Due to not having any positive reduction, LSVR and RF have NaN values in the fourth and fifth columns. \par}
     \label{tbl: hourly smape reduction}
 \end{table}
@@ -270,7 +270,7 @@ Table \ref{tbl: hourly smape reduction} contains the statistics about SMAPE redu
     \label{fig: hourly positive smape reduce box}
 \end{figure}
 
-To further investigate model behaviours, we look at time series number 271 (see Figure \ref{fig: hourly 271 ts}), which is of hourly frequency but an unknown domain. It is clear that such time series behaves very differently from what we have previously for the micro, macro, and financial domain. It turns out most time series of hourly frequency we tested are like this.
+To further investigate model behaviours, we look at time series number 271 (see Figure \ref{fig: hourly 271 ts}), which is of hourly frequency but an unknown domain. It is clear that such time series behaves very differently from what we have previously for the micro, macro, and financial domains. It turns out most time series of hourly frequency we tested are like this.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\columnwidth]{hourly_271_ts}
@@ -301,9 +301,9 @@ Figure \ref{fig: hourly 271 en} marks the predictions of EN on the test set of t
     \label{fig: hourly 271 mlp}
 \end{figure}
 
-\section{Discussion}
-In our experiment, we trained models with and without DCT in all cases to investigate the features of DCT. However, in practice, applying DCT should be considered an optional policy. One should set a hyperparameter that allows the model to decide not to use DCT if it deems inappropriate during model selection.
+\section{Discussions}
+In our experiment, we trained models with and without DCT in all cases to investigate the features of DCT. However, in practice, applying DCT should be considered an optional policy. One should set a hyperparameter that allows the model to decide not to use DCT if it deems inappropriate during model selection. And our analyses on positive SMAPE reductions show there can be good incentives for the model to choose to apply DCT.
 
-In general, we estimate that it can be worth it to try using DC Transformation in modelling tasks. DCT reduces noise where the interpolation has been performed. We can see that DC Transformation has two components, each having different effects on the output: the DC algorithm captures the extreme events while the interpolation component creates a smooth process between them. Moreover, DCT preserves the information carried by the peaks without toning them down like quintessential smoothing methods do. This gives DCT the ability to reduce noise while also capturing extreme events. Additionally, due to the interpolation being linear, DCT emphasises the trend in the time series that can lead to better model performance.
+In general, we estimate that it can be worth it to try using DC Transformation in modelling tasks. DCT reduces noise where the interpolation has been performed. We can see that DC Transformation has two components, each having different effects on the output: the DC algorithm captures the extreme events while the interpolation component creates a smooth process between them. Moreover, DCT preserves the information carried by the peaks without toning them down like typical smoothing methods do. This gives DCT the ability to reduce noise while also capturing extreme events. Additionally, due to the interpolation being linear, DCT emphasises the trend in the time series that can lead to better model performance.
 
 Seeing that interpolation does play an essential role in DCT, we tried other interpolation methods during exploratory trials. We tried quadratic and cubic interpolations that fit degree-two or degree-three polynomials in the intervals. We find both interpolations inadequate because they tend to create peaks in the intervals by their polynomial nature, as shown in Figure \ref{fig: dct 5 akima}. The intervals are supposed to be smooth because it is the DC algorithm's job to capture the extrema. Next, we tried Akima interpolation, which is a middle point between linear and quadratic interpolation (Akima (\citeyear{akima1970new})). We find it does perform better than quadratic interpolation, but we conclude that linear interpolation is still a better choice for our experiments.
